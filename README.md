@@ -1,6 +1,8 @@
 # What is this?
 This is a demo repository for the new **subzero** codebase implemented in Rust.
 
+subZero is a software development stack, with the primary focus of building GraphQL and REST APIs backed by a PostgreSQL/SQLite/Clickhouse database.
+
 ## Strengths compared to alternatives
 - Implemented in Rust &mdash; a modern and powerful language love by developers
 - Use it as a library/dependency to bootstrap your backend API Rust code
