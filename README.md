@@ -11,11 +11,13 @@ This is a demo repository for the new **subzero** codebase implemented in Rust.
 - [x] Core functions/types
 - [x] PostgreSQL backend
 - [x] SQLite backend
-- [] Clickhouse backend
 - [x] REST frontend (PostgREST compatible)
-- [] GraphQL frontend (Hasura/Postgraphile)
 - [x] Production ready code
-- [] Stable library interface
+- [ ] Stable library interface
+- [ ] Clickhouse backend
+- [ ] GraphQL frontend (Hasura/Postgraphile)
+
+
 
 ## Try it
 Bring up the docker services
