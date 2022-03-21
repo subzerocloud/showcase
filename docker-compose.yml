@@ -1,0 +1,111 @@
+version: '3'
+
+volumes:
+     sqlite-db:
+
+services:
+  db:
+    container_name: db
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespass
+      - POSTGRES_DB=app
+    volumes:
+      - "./demo/db/pg_init.sql:/docker-entrypoint-initdb.d/pg_init.sql"
+      #- "./db/pg_init.sh:/docker-entrypoint-initdb.d/pg_init.sh"
+  
+  sqlite-db-init:
+    container_name: sqlite-db-init
+    image: sqlite-db-init
+    build:
+      context: .
+      dockerfile: ./demo/Dockerfile_sqlite
+    entrypoint: bash -c "sqlite3 /root/db/appdb.db < /sqlite_init.sql"
+    volumes:
+      - sqlite-db:/root/db
+      - "./demo/db/sqlite_init.sql:/sqlite_init.sql"
+  
+  subzero-postgresql:
+    container_name: subzero-postgresql
+    image: subzero-postgresql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - BACKEND=postgresql
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "db"
+    environment:
+      # global configuration
+      - SUBZERO_ADDRESS=0.0.0.0
+
+      # configuration for the "DEFAULT" vhost (you can have multiple vhosts)
+      - SUBZERO_VHOSTS__DEFAULT__DB_URI=postgres://postgres:postgrespass@db:5432/app
+      - SUBZERO_VHOSTS__DEFAULT__DB_ANON_ROLE=postgres
+      - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false
+      - SUBZERO_VHOSTS__DEFAULT__DB_POOL=10
+      # - SUBZERO_VHOSTS__DEFAULT__URL_PREFIX="/"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMAS="[public]"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_MAX_ROWS=100,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_TX_ROLLBACK=false,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_PRE_REQUEST="schema_name.function_name",
+      # - SUBZERO_VHOSTS__DEFAULT__JWT_SECRET="reallyreallyreallyreallyverysafe",
+      # - SUBZERO_VHOSTS__DEFAULT__ROLE_CLAIM_KEY=".role",
+  
+  subzero-sqlite:
+    container_name: subzero-sqlite
+    image: subzero-sqlite
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - BACKEND=sqlite
+    ports:
+      - "9000:8000"
+    volumes:
+      - sqlite-db:/root/db
+    depends_on:
+      - "sqlite-db-init"
+    environment:
+      # global configuration
+      - SUBZERO_ADDRESS=0.0.0.0
+
+      # configuration for the "DEFAULT" vhost (you can have multiple vhosts)
+      - SUBZERO_VHOSTS__DEFAULT__DB_URI=/root/db/appdb.db
+      - SUBZERO_VHOSTS__DEFAULT__DB_ANON_ROLE=anonymous
+      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false
+      - SUBZERO_VHOSTS__DEFAULT__DB_POOL=10
+      # - SUBZERO_VHOSTS__DEFAULT__URL_PREFIX="/"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMAS="[public]"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
+      # - SUBZERO_VHOSTS__DEFAULT__DB_MAX_ROWS=100,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_TX_ROLLBACK=false,
+      # - SUBZERO_VHOSTS__DEFAULT__DB_PRE_REQUEST="schema_name.function_name",
+      # - SUBZERO_VHOSTS__DEFAULT__JWT_SECRET="reallyreallyreallyreallyverysafe",
+      # - SUBZERO_VHOSTS__DEFAULT__ROLE_CLAIM_KEY=".role",
+  
+  # boot up PostgREST to compare the same request being handled by both systems
+  postgrest:
+    container_name: postgrest
+    image: postgrest/postgrest:v9.0.0
+    ports:
+      - "3000:3000"
+    links:
+      - db:db
+    environment:
+      - PGRST_DB_URI=postgres://postgres:postgrespass@db:5432/app
+      - PGRST_DB_SCHEMA=public 
+      - PGRST_DB_ANON_ROLE=postgres
+      - PGRST_DB_CONFIG=false
+      - PGRST_DB_USE_LEGACY_GUCS=false
+      - PGRST_DB_POOL=10
+    depends_on:
+      - db
