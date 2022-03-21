@@ -3,7 +3,7 @@ This is a demo repository for the new **subzero** codebase implemented in Rust.
 
 ## Strengths compared to alternatives
 - Implemented in Rust &mdash; a modern and powerful language love by developers
-- Use it as a library/dependency in your own Rust code
+- Use it as a library/dependency to bootstrap your backend API Rust code
 - 2x-8x times faster
 - 50%-70% less memory usage
 
@@ -54,4 +54,5 @@ A general overview of the standard commercial license is:
 ### You can not
 - Distribute/publish the source code
 - Develop services/software that directly competes with subzero
+- Study the code to create competing products
 
