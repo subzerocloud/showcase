@@ -30,7 +30,7 @@ services:
   
   subzero-postgresql:
     container_name: subzero-postgresql
-    image: subzero-postgresql
+    image: subzerocloud/subzero-postgresql
     build:
       context: ./
       dockerfile: Dockerfile
@@ -49,6 +49,7 @@ services:
       - SUBZERO_DB_ANON_ROLE=postgres
       - SUBZERO_DB_USE_LEGACY_GUCS=false
       - SUBZERO_DB_POOL=10
+      - SUBZERO_DB_TYPE=postgresql
       # - SUBZERO_URL_PREFIX="/"
       # - SUBZERO_DB_SCHEMAS="[public]"
       # - SUBZERO_DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
@@ -61,7 +62,7 @@ services:
   
   subzero-sqlite:
     container_name: subzero-sqlite
-    image: subzero-sqlite
+    image: subzerocloud/subzero-sqlite
     build:
       context: ./
       dockerfile: Dockerfile
@@ -81,6 +82,7 @@ services:
       - SUBZERO_DB_ANON_ROLE=anonymous
       # - SUBZERO_DB_USE_LEGACY_GUCS=false
       - SUBZERO_DB_POOL=10
+      - SUBZERO_DB_TYPE=sqlite
       # - SUBZERO_URL_PREFIX="/"
       # - SUBZERO_DB_SCHEMAS="[public]"
       # - SUBZERO_DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
