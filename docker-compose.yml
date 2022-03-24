@@ -45,19 +45,19 @@ services:
       - SUBZERO_ADDRESS=0.0.0.0
 
       # configuration for the "DEFAULT" vhost (you can have multiple vhosts)
-      - SUBZERO_VHOSTS__DEFAULT__DB_URI=postgres://postgres:postgrespass@db:5432/app
-      - SUBZERO_VHOSTS__DEFAULT__DB_ANON_ROLE=postgres
-      - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false
-      - SUBZERO_VHOSTS__DEFAULT__DB_POOL=10
-      # - SUBZERO_VHOSTS__DEFAULT__URL_PREFIX="/"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMAS="[public]"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_MAX_ROWS=100,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_TX_ROLLBACK=false,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_PRE_REQUEST="schema_name.function_name",
-      # - SUBZERO_VHOSTS__DEFAULT__JWT_SECRET="reallyreallyreallyreallyverysafe",
-      # - SUBZERO_VHOSTS__DEFAULT__ROLE_CLAIM_KEY=".role",
+      - SUBZERO_DB_URI=postgres://postgres:postgrespass@db:5432/app
+      - SUBZERO_DB_ANON_ROLE=postgres
+      - SUBZERO_DB_USE_LEGACY_GUCS=false
+      - SUBZERO_DB_POOL=10
+      # - SUBZERO_URL_PREFIX="/"
+      # - SUBZERO_DB_SCHEMAS="[public]"
+      # - SUBZERO_DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
+      # - SUBZERO_DB_MAX_ROWS=100,
+      # - SUBZERO_DB_USE_LEGACY_GUCS=false,
+      # - SUBZERO_DB_TX_ROLLBACK=false,
+      # - SUBZERO_DB_PRE_REQUEST="schema_name.function_name",
+      # - SUBZERO_JWT_SECRET="reallyreallyreallyreallyverysafe",
+      # - SUBZERO_ROLE_CLAIM_KEY=".role",
   
   subzero-sqlite:
     container_name: subzero-sqlite
@@ -77,20 +77,19 @@ services:
       # global configuration
       - SUBZERO_ADDRESS=0.0.0.0
 
-      # configuration for the "DEFAULT" vhost (you can have multiple vhosts)
-      - SUBZERO_VHOSTS__DEFAULT__DB_URI=/root/db/appdb.db
-      - SUBZERO_VHOSTS__DEFAULT__DB_ANON_ROLE=anonymous
-      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false
-      - SUBZERO_VHOSTS__DEFAULT__DB_POOL=10
-      # - SUBZERO_VHOSTS__DEFAULT__URL_PREFIX="/"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMAS="[public]"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
-      # - SUBZERO_VHOSTS__DEFAULT__DB_MAX_ROWS=100,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_USE_LEGACY_GUCS=false,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_TX_ROLLBACK=false,
-      # - SUBZERO_VHOSTS__DEFAULT__DB_PRE_REQUEST="schema_name.function_name",
-      # - SUBZERO_VHOSTS__DEFAULT__JWT_SECRET="reallyreallyreallyreallyverysafe",
-      # - SUBZERO_VHOSTS__DEFAULT__ROLE_CLAIM_KEY=".role",
+      - SUBZERO_DB_URI=/root/db/appdb.db
+      - SUBZERO_DB_ANON_ROLE=anonymous
+      # - SUBZERO_DB_USE_LEGACY_GUCS=false
+      - SUBZERO_DB_POOL=10
+      # - SUBZERO_URL_PREFIX="/"
+      # - SUBZERO_DB_SCHEMAS="[public]"
+      # - SUBZERO_DB_SCHEMA_STRUCTURE="{sql_file=structure_query.sql}"
+      # - SUBZERO_DB_MAX_ROWS=100,
+      # - SUBZERO_DB_USE_LEGACY_GUCS=false,
+      # - SUBZERO_DB_TX_ROLLBACK=false,
+      # - SUBZERO_DB_PRE_REQUEST="schema_name.function_name",
+      # - SUBZERO_JWT_SECRET="reallyreallyreallyreallyverysafe",
+      # - SUBZERO_ROLE_CLAIM_KEY=".role",
   
   # boot up PostgREST to compare the same request being handled by both systems
   postgrest:
