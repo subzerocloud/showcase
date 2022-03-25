@@ -3,7 +3,7 @@ This is a demo repository for the new **subzero** codebase implemented in Rust.
 
 **subZero** is a standalone web server that turns your database directly into a REST/GraphQL api.
 
-You can use it as precompiled binary (or docker image) where the constraints and permissions in the database, determine the api endpoints and operations or you can use it as a library dependence in your Rust code to bootstrap 90% of your backend while having the complete freedome to implement the remaining bits yourself. 
+You can use it as precompiled binary (or docker image) where the constraints and permissions in the database determine the api endpoints and operations or you can use it as a library dependence in your Rust code to bootstrap 90% of your backend while having the complete freedome to implement the remaining bits yourself. 
 
 ## Strengths compared to alternatives
 - Implemented in Rust &mdash; a modern and powerful language love by developers
