@@ -41,7 +41,7 @@ async fn handle_request(
     method: &Method, table: &String, origin: &Origin<'_>, parameters: &QueryString<'_>, body: Option<String>, cookies: &CookieJar<'_>,
     headers: AllHeaders<'_>, db_backend: &State<DbBackend>,
 ) -> Result<ApiResponse, RocketError> {
-    let (status, content_type, headers, body) = postgrest::handle(
+    let (status, response_content_type, response_headers, response_body) = postgrest::handle(
         table,
         method,
         origin.path().to_string(),
@@ -54,7 +54,7 @@ async fn handle_request(
     .await
     .map_err(|e| RocketError(e))?;
 
-    let http_content_type = match content_type {
+    let http_content_type = match response_content_type {
         SingularJSON => SINGLE_CONTENT_TYPE.clone(),
         TextCSV => HTTPContentType::CSV,
         ApplicationJSON => HTTPContentType::JSON,
@@ -63,9 +63,9 @@ async fn handle_request(
     Ok(ApiResponse {
         response: (
             Status::from_code(status).context(GucStatusError).map_err(|e| RocketError(e))?,
-            (http_content_type, body),
+            (http_content_type, response_body),
         ),
-        headers: headers.into_iter().map(|(n, v)| Header::new(n, v)).collect::<Vec<_>>(),
+        headers: response_headers.into_iter().map(|(n, v)| Header::new(n, v)).collect::<Vec<_>>(),
     })
 }
 
