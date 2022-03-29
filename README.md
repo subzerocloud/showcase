@@ -48,16 +48,14 @@ curl -i "http://localhost:9000/projects?select=id,name&id=gt.1"
 ```
 
 ## Source code
-The source code in this repository is free/public but the source code of the "subzero" library referenced in `Cargo.toml` is available under a commercial license.
-
-While in beta, you can get access instantly (and compile the code in this repository) by selecting the [Beta Tester](https://github.com/sponsors/subzerocloud) sponsor tier or contact us and we'll give you access manually (in about 1 day).
+While in beta, you can get a license and access instantly (and compile the code in this repository) by selecting the [Beta Tester](https://github.com/sponsors/subzerocloud) sponsor tier or contact us and we'll give you access manually (in about 1 day).
 
 ## License
 A general overview of the standard commercial license is:
 ### You can
-- Use the binary/source for one project
-- Develop a SaaS product
-- Develop software that is distributed to clients in binary form.
+- Use the binary distribution for commercial or non-commercial purposes without charge 
+- Use the source distribution to develop a SaaS product (subject to charges)
+- Use the source distribution to develop software that is distributed to clients in binary form (subject to charges).
 ### You can not
 - Distribute/publish the source code
 - Develop services/software that directly competes with subzero
