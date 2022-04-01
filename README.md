@@ -9,11 +9,11 @@ Alternatively, you can use it as a library dependence in your Rust code to boots
 ## Strengths
 
 - ### Complete CRUD and Auth out of the box
-    Just by defining your tables and views in your database you get a powerful CRUD api out of the box that will cover 90%+ of your needs. Throw in some database grands and constraints and you've got your self an authentication/authorization functionality also.
+    Just by defining your tables and views in your database you get a powerful CRUD api out of the box that will cover 90%+ of your needs. Throw in some database grands and constraints and you've got yourself an authentication/authorization functionality also.
 - ### Extensible (use it as a library)
     The majority of the alternatives are available only as standalone services and to add custom functionality you have to use a combination between a proxy, messaging server and lambda functions (in addition to your database). This, as you imagine, massively complicates your production infrastructure and deployment procedure and of course you need extensive devops knowledge and resources. By using subzero as a library, you side step all that needles complication and deploy your custom application as a single binary/container.
 - ### Rust codebase
-    Rust is consistently voted [the most loved language](https://insights.stackoverflow.com/survey/2021#section-most-loved-dreaded-and-wanted-programming-scripting-and-markup-languages) by developers and in heavy use at AWS, Google, Microsoft. This ensures that besides it's raw speed you also get a big pool of highly competent developers that a ready (and will enjoy) work on the codebase.
+    Rust is consistently voted [the most loved language](https://insights.stackoverflow.com/survey/2021#section-most-loved-dreaded-and-wanted-programming-scripting-and-markup-languages) by developers and in heavy use at AWS, Google, Microsoft. This ensures that besides it's raw speed you also get a big pool of highly competent developers that are ready (and will enjoy) work on the codebase.
 - ### <insert_superlative_here> Speed
     It's already cliche to use words like *blazing*, *lightning*, *impressive* to describe the performance of your product and we are running out of adjectives. How do you describe a product that is up to **8 times faster** then the alternatives? We would like to assume credit for that though at this stage, this speed can mostly be attributed to Rust, that is to say, we haven't really optimized the code for performance yet, so expect even more impressive numbers.
 
