@@ -30,12 +30,7 @@ services:
   
   subzero-postgresql:
     container_name: subzero-postgresql
-    image: subzerocloud/subzero-postgresql
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      args:
-        - BACKEND=postgresql
+    image: subzerocloud/subzero
     ports:
       - "8000:8000"
     depends_on:
@@ -62,12 +57,7 @@ services:
   
   subzero-sqlite:
     container_name: subzero-sqlite
-    image: subzerocloud/subzero-sqlite
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      args:
-        - BACKEND=sqlite
+    image: subzerocloud/subzero
     ports:
       - "9000:8000"
     volumes:
@@ -93,20 +83,3 @@ services:
       # - SUBZERO_JWT_SECRET="reallyreallyreallyreallyverysafe",
       # - SUBZERO_ROLE_CLAIM_KEY=".role",
   
-  # boot up PostgREST to compare the same request being handled by both systems
-  postgrest:
-    container_name: postgrest
-    image: postgrest/postgrest:v9.0.0
-    ports:
-      - "3000:3000"
-    links:
-      - db:db
-    environment:
-      - PGRST_DB_URI=postgres://postgres:postgrespass@db:5432/app
-      - PGRST_DB_SCHEMA=public 
-      - PGRST_DB_ANON_ROLE=postgres
-      - PGRST_DB_CONFIG=false
-      - PGRST_DB_USE_LEGACY_GUCS=false
-      - PGRST_DB_POOL=10
-    depends_on:
-      - db

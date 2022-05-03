@@ -2,6 +2,8 @@
 
 **subZero** is a standalone, extensible web server that turns your database directly into a REST/GraphQL api.
 
+This repository is a showcases of it's functionality.
+
 You can use it for free as a docker image where the constraints and permissions in the database determine the api endpoints and operations.
 
 Alternatively, you can use it as a library dependence in your Rust code to bootstrap 90% of your backend and extend it with your custom routes and functionality. 
@@ -25,7 +27,6 @@ Alternatively, you can use it as a library dependence in your Rust code to boots
 - [x] Production ready code
 - [ ] Stable library interface
 - [ ] Clickhouse backend
-- [ ] GraphQL frontend (Hasura/Postgraphile)
 
 
 
@@ -39,7 +40,8 @@ You can interact with the database at the following endpoints
 - Interact with the PostgreSQL database (subzero-postgresql) -  `http://localhost:8000/`
 - Interact with the SQLite database (subzero-sqlite) - `http://localhost:9000/`
 
-The REST API uses [PostgREST dialect](https://postgrest.org/en/stable/api.html) so you can use any of it's specific client implementation (though we prefer default http clients since PostgREST specific clients do nothing more then assemble a url string).
+The REST API uses [PostgREST dialect](https://postgrest.org/en/stable/api.html) with additional support for [analitical queries](https://docs.subzero.cloud/reference/data/aggregate/) (GROUP BY, aggregate functions, window functions).
+
 
 PostgreSQL backend sample request.
 ```
