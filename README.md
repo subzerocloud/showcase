@@ -11,7 +11,7 @@ Alternatively, you can use it as a library dependence in your Rust code to boots
 ## Strengths
 
 - ### Complete CRUD and Auth out of the box
-    Just by defining your tables and views in your database you get a powerful CRUD api out of the box that will cover 90%+ of your needs. Throw in some database grands and constraints and you've got yourself an authentication/authorization functionality also.
+    Just by defining your tables and views in your database you get a powerful CRUD api out of the box that will cover 90%+ of your needs. Throw in some database grants and constraints and you've got yourself an authentication/authorization functionality also.
 - ### Extensible (use it as a library)
     The majority of the alternatives are available only as standalone services and to add custom functionality you have to use a combination between a proxy, messaging server and lambda functions (in addition to your database). This, as you imagine, massively complicates your production infrastructure and deployment procedure and of course you need extensive devops knowledge and resources. By using subzero as a library, you side step all that needles complication and deploy your custom application as a single binary/container.
 - ### Rust codebase
