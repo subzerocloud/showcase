@@ -53,9 +53,6 @@ SQLite backend sample request.
 curl -i "http://localhost:9000/projects?select=id,name,tasks(name)&id=gt.1"
 ```
 
-## Source code
-While in beta, you can get a lifetime license and access to the full source code by starring this repository.
-
 ## License
 A general overview of the standard commercial license is:
 ### You can
