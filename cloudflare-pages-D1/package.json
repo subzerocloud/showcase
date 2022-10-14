@@ -1,0 +1,36 @@
+{
+  "name": "cloudflare-pages-d1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run wrangler-dev & npm run next-dev && kill $!",
+    "next-dev": "npx next dev -p 3000",
+    "wrangler-dev": "npx wrangler@latest pages dev out --port 3001  --local --persist",
+    "preinstall": "mkdir -p .wrangler/state/d1 && sqlite3 .wrangler/state/d1/DB.sqlite3 < schema.sql > /dev/null", 
+    "build": "next build && next export",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.3",
+    "@heroicons/react": "^2.0.12",
+    "itty-router": "^2.6.6",
+    "next": "12.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "subzerocloud": "^0.1.1",
+    "swr": "^1.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.16.0",
+    "@tailwindcss/forms": "^0.5.3",
+    "@types/node": "18.8.2",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.12",
+    "eslint": "8.24.0",
+    "eslint-config-next": "12.3.1",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.8.4"
+  }
+}
