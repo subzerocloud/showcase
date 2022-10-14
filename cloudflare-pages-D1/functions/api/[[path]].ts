@@ -17,10 +17,12 @@ const max_log_size = 100;
 // they can be used in the select parameter
 const allowed_select_functions = ['substr', 'printf']
 
-// internal permissions can be defined here
-// they are usefull when the underlying database does not have that capability or when the database is not under your control
-// to define api specific roles
-// permission system is modeled after PostgreSql GRANT + RLS functionality
+// Internal permissions can be defined here.
+// They are usefull when the underlying database does not have that capability or when the database is not under your control to define api specific roles.
+// Permission system is modeled after PostgreSql GRANT + RLS functionality.
+// If the permissions array is empty, the internal permission system is disabled and assumes that the underlying database has the
+// necessary permissions configured.
+
 const permissions = [
     // example permissions
 
@@ -79,9 +81,9 @@ const permissions = [
 
 ];
 
-// while the introspection query can detect most relations automaticlly based on foreign keys,
-// in situations where they are not detected (ex: views in sqlite)
-// custom relations can be defined here
+// While the introspection query can detect most relations automaticlly based on foreign keys,
+// in situations where they are not detected (ex: views in sqlite).
+// Custom relations can be defined here
 const custom_relations = [
     // {
     //     "constraint_name": "tasks_project_id_fkey",
