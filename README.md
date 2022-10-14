@@ -10,7 +10,7 @@ Alternatively, you can use it as a library dependence in your Rust/JavaScript/Ty
 
 ## Explore examples
 
-- [cloudflare-pages-d1](cloudflare-pages-d1) - A example of a cloudflare pages deployment with data storred in D1 (Cloudflare's SQLite compatible edge databse).
+- [cloudflare-pages-d1](cloudflare-pages-D1) - A example of a cloudflare pages deployment with data storred in D1 (Cloudflare's SQLite compatible edge databse).
 
 
 
