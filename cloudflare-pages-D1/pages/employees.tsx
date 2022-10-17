@@ -29,8 +29,8 @@ const Employees: NextPage = () => {
                     <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    {error && <div>Failed to load</div>}
-                    {!data && <div>Loading...</div>}
+                    {error && <div>Failed to load "{error.toString()}"</div>}
+                    {!error && !data && <div>Loading...</div>}
                 </div>
             </div>
             {!error && data &&

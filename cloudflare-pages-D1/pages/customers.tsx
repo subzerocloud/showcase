@@ -6,7 +6,7 @@ import { fetcher } from '../utils/utils'
 
 const limit = 20
 const title = 'Customers'
-const idColumn = 'CustomerId'
+const idColumn = 'CustomerID'
 const avatarColumn = 'ContactName'
 const columns = [
     { name: 'CompanyName', header: 'Company' },

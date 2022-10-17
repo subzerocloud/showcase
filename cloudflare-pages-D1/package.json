@@ -6,9 +6,8 @@
     "dev": "npm run wrangler-dev & npm run next-dev && kill $!",
     "next-dev": "npx next dev -p 3000",
     "wrangler-dev": "npx wrangler@latest pages dev out --port 3001  --local --persist",
-    "preinstall": "mkdir -p .wrangler/state/d1 && sqlite3 .wrangler/state/d1/DB.sqlite3 < schema.sql > /dev/null", 
-    "build": "next build && next export",
-    "lint": "next lint"
+    "preinstall": "DB_PATH=.wrangler/state/d1; mkdir -p $DB_PATH && sqlite3 $DB_PATH/DB.sqlite3 < northwindtraders.sql > /dev/null"
+
   },
   "dependencies": {
     "@headlessui/react": "^1.7.3",
@@ -26,9 +25,6 @@
     "@types/node": "18.8.2",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
-    "autoprefixer": "^10.4.12",
-    "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1",
     "postcss": "^8.4.17",
     "tailwindcss": "^3.1.8",
     "typescript": "4.8.4"
