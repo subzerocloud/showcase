@@ -26,3 +26,9 @@ function parseRangeHeader(header: string) {
     const last = parseInt(range[1], 10) || 0
     return { first, last, total }
 }
+
+// helper function to format the value of the content-range header (ex: 0-9/100)
+export function content_range_header(lower: number, upper: number, total?: number): string {
+    const range_string = (total != 0 && lower <= upper) ? `${lower}-${upper}` : '*'
+    return total ? `${range_string}/${total}` : `${range_string}/*`
+}

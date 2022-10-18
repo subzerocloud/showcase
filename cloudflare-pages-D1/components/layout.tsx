@@ -2,13 +2,13 @@ import Link from 'next/link';
 // import Image from 'next/image'
 //import { useRouter } from 'next/router';
 
-import { Fragment, useState, useEffect } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { useState, useEffect } from 'react'
+//import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   ArchiveBoxIcon, //supliers
   ShoppingCartIcon, // orders
   IdentificationIcon, //employees
-  MagnifyingGlassIcon, //search
+  //MagnifyingGlassIcon, //search
   RectangleGroupIcon, //dashboard
   CubeIcon, //products
   //CalendarIcon,
@@ -39,7 +39,7 @@ const backoffice = [
   { name: 'Orders', href: '/orders', icon: ShoppingCartIcon },
   { name: 'Employees', href: '/employees', icon: IdentificationIcon },
   { name: 'Customers', href: '/customers', icon: UsersIcon },
-  { name: 'Search', href: '/search', icon: MagnifyingGlassIcon },
+  //{ name: 'Search', href: '/search', icon: MagnifyingGlassIcon },
 ]
 
 // const userNavigation = [

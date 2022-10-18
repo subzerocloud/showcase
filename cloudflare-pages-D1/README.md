@@ -11,10 +11,13 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
 
 ## Running locally
 - Clone the repo
-- Install dependencies
-    You will need to have SQLite installed on your machine
+- Install dependencies (you will need to have SQLite installed on your machine)
     ```bash
     yarn install
+    ```
+- Populate the database
+    ```bash
+    yarn seed
     ```
 - Run in dev mode
     ```bash

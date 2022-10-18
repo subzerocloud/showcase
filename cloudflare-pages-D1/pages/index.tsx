@@ -11,6 +11,7 @@ const Home: NextPage = () => {
                 <h2 className='text-xl text-gray-400 mb-5'>Running on Cloudflare&apos;s Pages + D1</h2>
                 <img alt='' className='float-right object-scale-down w-96' src="dbimage.webp" />
                 <p className='pt-4'>This is a demo of the Northwind dataset</p>
+                <p className='pt-4'>You can see the <a className='link' href='https://github.com/subzerocloud/showcase/tree/main/cloudflare-pages-D1'>source code</a> on Github</p>
                 <ul>
                     <li className='pt-4'>Frontend is implemented in NextJS</li>
                     <li className='pt-4'>Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database</li>
