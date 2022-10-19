@@ -11,7 +11,7 @@ const Home: NextPage = () => {
                 <h2 className='text-xl text-gray-400 mb-5'>Running on Fly.io and SQLite (LiteFS)</h2>
                 <img alt='' className='float-right object-scale-down w-96' src="dbimage.webp" />
                 <p className='pt-4'>This is a demo of the Northwind dataset</p>
-                <p className='pt-4'>You can see the <a className='link' href='https://github.com/subzerocloud/showcase/tree/main/flyio-sqlite'>source code</a> and additional implementation details on Github</p>
+                <p className='pt-4'>You can see the <a className='link' href='https://github.com/subzerocloud/showcase/tree/main/flyio-sqlite-litefs'>source code</a> and additional implementation details on Github</p>
                 
                 <ul>
                     <li className='pt-4'>Frontend is implemented in NextJS</li>
