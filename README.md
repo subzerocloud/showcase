@@ -11,6 +11,7 @@ Alternatively, you can use it as a library dependence in your Rust/JavaScript/Ty
 ## Explore examples
 
 - [cloudflare-pages-d1](cloudflare-pages-D1) - A example of a cloudflare pages deployment with data storred in D1 (Cloudflare's SQLite compatible edge databse).
+- [flyio-sqlite-litefs](flyio-sqlite-litefs) - A example of a Fly.io with data storred in a SQLite database that is replicated between nodes using LiteFS.
 
 
 

@@ -1,0 +1,33 @@
+# The path to where the SQLite database will be accessed.
+mount-dir: "/data"
+
+# The path to where the underlying volume mount is.
+data-dir: "/mnt/data"
+
+# Execute this subprocess once LiteFS connects to the cluster. 
+exec: "node server.js --db=/data/db --schema=/northwindtraders.sql"
+
+# The debug flag enables debug logging of all FUSE API calls.
+# debug: true
+
+
+# These environment variables will be available in your Fly.io application.
+# You must specify "experiement.enable_consul" for FLY_CONSUL_URL to be available.
+consul:
+  url: "${FLY_CONSUL_URL}"
+  advertise-url: "http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202"
+
+
+# Static leadership can be used instead of Consul if only one
+# node should ever be the primary. Only one node in the cluster
+# can be marked as the "primary".
+# static:
+#   # Specifies that the current node is the primary.
+#   primary: true
+
+#   # Required. Hostname of the primary node.
+#   hostname: "localhost"
+
+#   # Required. The API URL of the primary node.
+#   advertise-url: "http://localhost:20202"
+
