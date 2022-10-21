@@ -1,8 +1,9 @@
 // this is a catch-all function that is called for every request to the api
 
 import { Router } from 'itty-router'
-import { Subzero, SubzeroError, get_introspection_query, Env as QueryEnv } from 'subzerocloud'
-import { content_range_header } from '../../utils/utils'
+import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
+import permissions from './permissions.js'
+import custom_relations from './relations.js'
 
 const urlPrefix = '/api'
 const publicSchema = 'public'
@@ -16,40 +17,6 @@ const allowed_select_functions = ['substr', 'printf']
 let query_log: { time: number, query: string, parameters: any[] }[] = []
 const max_log_size = 100
 
-// Internal permissions can be defined here.
-// They are usefull when the underlying database does not have that capability or when the database is not under your control to define api specific roles.
-// Permission system is modeled after PostgreSql GRANT + RLS functionality.
-// If the permissions array is empty, the internal permission system is disabled and assumes that the underlying database has the
-// necessary permissions configured.
-const permissions = [
-    // allow select on all tables used in the UI for the public role
-    { "table_schema": "public", "table_name": "Customers", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Suppliers", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Products", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Orders", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Employees", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Customer", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-    { "table_schema": "public", "table_name": "Order Details", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
-]
-
-// While the introspection query can detect most relations automaticlly based on foreign keys,
-// in situations where they are not detected (ex: views in sqlite).
-// Custom relations can be defined here
-const custom_relations = [
-    // {
-    //     "constraint_name": "tasks_project_id_fkey",
-    //     "table_schema": "public",
-    //     "table_name": "tasks",
-    //     "columns": ["project_id"],
-    //     "foreign_table_schema": "public",
-    //     "foreign_table_name": "projects",
-    //     "foreign_columns": ["id"]
-    // }
-]
-
-const router = Router()
-let subzero: Subzero
-
 // add event to the query log
 function log_query(query: string, parameters: any[]) {
     query_log.unshift({ time: Date.now(), query, parameters })
@@ -59,8 +26,9 @@ function log_query(query: string, parameters: any[]) {
 }
 
 // this function initializes the subzero instance that is responsible for parsing and formatting the queries
+let subzero: Subzero
 async function init_subzero(env) {
-    const { query /*, parameters*/ } = get_introspection_query(
+    const { query /*, parameters*/ } = getIntrospectionQuery(
         dbType, // database type
         publicSchema, // the schema name that is exposed to the HTTP api (ex: public, api), though in case of sqlite this is ignored
 
@@ -86,8 +54,11 @@ async function init_subzero(env) {
 // alternatifely, one can use the routing logic from Cloudflare Pages 
 // https://developers.cloudflare.com/pages/platform/functions/#functions-routing
 
+// setup the router that is used to route the requests to the correct handler
+const router = Router({ base: urlPrefix })
+
 // define a custom handler for / route
-router.get(`${urlPrefix}/`, async () => {
+router.get('/', async () => {
     const response = { message: 'Hello World!' }
     return new Response(JSON.stringify(response), {
         status: 200,
@@ -96,7 +67,7 @@ router.get(`${urlPrefix}/`, async () => {
 })
 
 // route to return the query log (displayed on Dahsboard)
-router.get(`${urlPrefix}/stats`, async () => {
+router.get('/stats', async () => {
     return new Response(JSON.stringify(query_log), {
         status: 200,
         headers: {'content-type': 'application/json'}
@@ -105,22 +76,21 @@ router.get(`${urlPrefix}/stats`, async () => {
 
 // This route will expose a PostgREST compatible api to the underlying D1 database
 // This is where the magic happens
-router.all(`${urlPrefix}/:table`, async (req, { env, request }) => {
-
-    // initialize the subzero instance if it is not initialized yet
-    if (!subzero) {
-        await init_subzero(env)
-    }
+router.all('/:table', async (req:Request, { env }) => {
+    // the role that is currently making the request
+    // usually this would come from the JWT token payload
+    // this role is used for the permissions check 
+    const role = 'anonymous'
 
     const method = req.method
     if (! ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
         throw new SubzeroError(`Method ${method} not allowed`, 400)
     }
 
-    // the role that is currently making the request
-    // usually this would come from the JWT token payload
-    // this role is used for the permissions check 
-    const role = 'anonymous'
+    // initialize the subzero instance if it is not initialized yet
+    if (!subzero) {
+        await init_subzero(env)
+    }
 
     // pass env values that should be available in the query context
     let queryEnv: QueryEnv = [
@@ -128,19 +98,19 @@ router.all(`${urlPrefix}/:table`, async (req, { env, request }) => {
     ]
 
     // parse the Request object into and internal AST representation
-    // note `req` is a Request object from itty-router
-    // that is why we need to use `request` from the destructuring which is the original Fetch Request object
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, request)
+    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
 
     // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmt_main_query(subzeroRequest, queryEnv)
+    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
     log_query(query, parameters)
 
     // prepare the statement
     const statement = env.DB.prepare(query).bind(...parameters)
 
+    const query_start = Date.now()
     // the generated query always returns one row
     const result = await statement.first()
+    const query_end = Date.now()
 
     const body = result.body // this is a json string
     const status = Number(result.status) || 200
@@ -148,17 +118,17 @@ router.all(`${urlPrefix}/:table`, async (req, { env, request }) => {
     const totalResultSet = Number(result.total_result_set) || undefined
 
     // extract the offset parameter that is needed to calculate the content-range header
-    // note req is the itty-router request object
-    let { query: http_query } = req
-    let { offset } = http_query
+    const url = new URL(req.url)
+    const offset = url.searchParams.get('offset')
     let offsetInt = Number(offset) || 0
 
     return new Response(body, {
         status,
         headers: {
             'range-unit': 'items',
-            'content-range': content_range_header(offsetInt, offsetInt + pageTotal - 1, totalResultSet),
-            'content-type': 'application/json'
+            'content-range': fmtContentRangeHeader(offsetInt, offsetInt + pageTotal - 1, totalResultSet),
+            'content-type': 'application/json',
+            'x-query-time': `${(query_end - query_start).toFixed(2)}ms`,
         }
     })
 })
