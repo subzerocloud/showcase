@@ -1,6 +1,6 @@
 # Northwind Traders (by subZero)
 ### Running on Fly.io + SQLite (LiteFS)
-This is a demo of the Northwind dataset
+This is a demo of the Northwind dataset, see it live at [northwindtraders.fly.dev](https://northwindtraders.fly.dev).
 - Frontend is implemented in NextJS</li>
 - Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database
 - Data is stored in SQLite database that is replicated to all node using [LiteFS](https://fly.io/blog/introducing-litefs/)
