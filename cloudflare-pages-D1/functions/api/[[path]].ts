@@ -2,8 +2,8 @@
 
 import { Router } from 'itty-router'
 import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
-import permissions from './permissions.js'
-import custom_relations from './relations.js'
+import permissions from '../../permissions.js'
+import custom_relations from '../../relations.js'
 
 const urlPrefix = '/api'
 const publicSchema = 'public'

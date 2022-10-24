@@ -8,8 +8,8 @@ import { dirname } from 'path';
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { Router } from 'itty-router'
-import permissions from './permissions.js'
-import custom_relations from './relations.js'
+import permissions from '../../permissions.js'
+import custom_relations from '../../relations.js'
 
 const argv = yargs(hideBin(process.argv)).options({
     db: { type: 'string', default: 'db.sqlite' },
