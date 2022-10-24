@@ -1,58 +1,18 @@
 import Link from 'next/link';
-// import Image from 'next/image'
-//import { useRouter } from 'next/router';
 
-import { Fragment, useState, useEffect } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
-import {
-  ArchiveBoxIcon, //supliers
-  ShoppingCartIcon, // orders
-  IdentificationIcon, //employees
-  MagnifyingGlassIcon, //search
-  RectangleGroupIcon, //dashboard
-  CubeIcon, //products
-  //CalendarIcon,
-  //ChartBarIcon,
-  //FolderIcon,
-  HomeIcon,
-  //InboxIcon,
-  UsersIcon,
-//  XMarkIcon,
-} from '@heroicons/react/24/outline'
-// import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { useState, useEffect } from 'react'
+
 type DashboardLayoutProps = {
-    children: React.ReactNode,
+  children: React.ReactNode,
+  general: { name: string, href: string, icon: any }[],
+  backoffice: { name: string, href: string, icon: any }[],
 };
-
-const general = [
-  { name: 'Home', href: '/', icon: HomeIcon },
-  //{ name: 'Dashboard', href: '/dash', icon: RectangleGroupIcon },
-  // { name: 'Projects', href: '#', icon: FolderIcon },
-  // { name: 'Calendar', href: '#', icon: CalendarIcon },
-  // { name: 'Documents', href: '#', icon: InboxIcon },
-  // { name: 'Reports', href: '#', icon: ChartBarIcon },
-]
-
-const backoffice = [
-  { name: 'Suppliers', href: '/suppliers', icon: ArchiveBoxIcon },
-  { name: 'Products', href: '/products', icon: CubeIcon },
-  { name: 'Orders', href: '/orders', icon: ShoppingCartIcon },
-  { name: 'Employees', href: '/employees', icon: IdentificationIcon },
-  { name: 'Customers', href: '/customers', icon: UsersIcon },
- // { name: 'Search', href: '/search', icon: MagnifyingGlassIcon },
-]
-
-// const userNavigation = [
-//   { name: 'Your Profile', href: '#' },
-//   { name: 'Settings', href: '#' },
-//   { name: 'Sign out', href: '#' },
-// ]
 
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Layout({ children }: DashboardLayoutProps) {
+export default function Layout({ general, backoffice, children }: DashboardLayoutProps) {
   const [activeMenuItem, setActiveMenuItem] = useState('/')
   useEffect(() => setActiveMenuItem(window.location.pathname), [])
   return (
