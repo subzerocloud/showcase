@@ -38,6 +38,7 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     ```bash
     fly launch
     ```
+    Note: select `Yes` for `Would you like to copy its configuration to the new app?`
 
 
 See aditional documentation about scaling and cunfiguration of [LiteFS](https://fly.io/docs/litefs/getting-started/)
