@@ -85,6 +85,7 @@ const router = Router({ base: urlPrefix })
 // define a custom handler for / route
 router.get('/', async (_, res) => {
     res.status(200).json({ message: 'Hello World!' })
+    return res
 })
 
 // This function will expose a PostgREST compatible api to the underlying SQLite database
@@ -170,12 +171,14 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(status)
     Object.entries(headers).forEach(([key, value]) => res.setHeader(key, value))
     res.send(result.body)
+    return res
 })
 
 // catch all handler (404)
 // this should be the last handler defined
 router.all('*', async (req, res) => {
     res.status(404).json({ message: 'Not found' })
+    return res
 })
 // This is the entry point 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
