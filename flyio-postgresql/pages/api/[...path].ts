@@ -11,6 +11,7 @@ const urlPrefix = '/api'
 const publicSchema = 'public'
 const dbType = 'postgresql'
 const connectionString = process.env.DATABASE_URL || process.env.DEV_DATABASE_URL
+//console.log(connectionString)
 const dbPool = new Pool({
     connectionString,
     max: 20,
@@ -50,6 +51,7 @@ async function init_subzero() {
             ['permissions.json', permissions],
         ])
     )
+    //console.log(query, parameters)
     const db = await dbPool.connect()
     const result = await db.query(query, parameters)
     db.release()
@@ -58,6 +60,7 @@ async function init_subzero() {
     // this schema object is used to generate the queries and check the permissions
     // to make the function startup faster, one can cache the schema object
     const schema = JSON.parse(result.rows[0].json_schema)
+    console.log('schema', schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
 }
 
