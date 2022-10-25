@@ -26,25 +26,42 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
 ## Deploying to Fly.io
 
 
-- Create the `fly.toml` file
+- Create the app on Fly.io
     ```bash
-    cp fly.toml.example fly.toml
-    ```
-- Launch the app
-    ```bash
-    fly launch
+    flyctl launch --no-deploy
     ```
 
+- Create a new database
+    ```bash
+    flyctl postgres create
+    ```
 
-See aditional documentation about scaling and cunfiguration of [LiteFS](https://fly.io/docs/litefs/getting-started/)
+- Attach the database to the app
+    ```bash
+    flyctl postgres attach --app <app-name> <postgres-app-name>
+    ```
+- Proxy the db so that we can access it locally
+    ```bash
+    flyctl proxy 5432 -a <postgres-app-name>
+    ```
+
+- Populate the database
+    ```bash
+    psql postgres://postgres@localhost:<app-name> -f northwindtraders.sql
+    ```
+
+- Deploy the app
+    ```bash
+    flyctl deploy
+    ```
+
 
 ## Implementation details
 
 Most of the files in this directory are your basic NextJS setup with some configuration for tailwindcss and typescript.
 The interesting files are:
-- Fly.io setup
-    Usually fly.io will detect nextjs applications and deploy automatically, however in this case wee need to setup LiteFS, which mens we need it's binary and configuration available in the container. This is the reason for having a custom [Dockerfile](Dockerfile)
-- The file implementing [the backend](pages/api/[table].ts)
+
+- The file implementing [the backend](pages/api/[...path].ts)
     Most of the code deals with the configuration of the backend, and 99% of the functionality is withing these lines:
     ```typescript
     // parse the Request object into and internal AST representation
@@ -54,10 +71,6 @@ The interesting files are:
     const { query, parameters } = subzero.fmt_main_query(subzeroRequest, queryEnv)
     // .....
     // execute the query
-    const result = await db.get(query, parameters)
+    const r = await db.query(query, parameters)
     ```
-
-    Aditionally there is some code specific to a LiteFS setup that periodically checks is the current node is the primary node and if not, it will redirect the request to the primary node.
-    
-
 

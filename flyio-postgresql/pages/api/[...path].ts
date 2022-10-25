@@ -60,7 +60,7 @@ async function init_subzero() {
     // this schema object is used to generate the queries and check the permissions
     // to make the function startup faster, one can cache the schema object
     const schema = JSON.parse(result.rows[0].json_schema)
-    console.log('schema', schema)
+    //console.log('schema', schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
 }
 

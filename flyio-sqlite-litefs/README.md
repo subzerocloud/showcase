@@ -49,7 +49,7 @@ Most of the files in this directory are your basic NextJS setup with some config
 The interesting files are:
 - Fly.io setup
     Usually fly.io will detect nextjs applications and deploy automatically, however in this case wee need to setup LiteFS, which mens we need it's binary and configuration available in the container. This is the reason for having a custom [Dockerfile](Dockerfile)
-- The file implementing [the backend](pages/api/[table].ts)
+- The file implementing [the backend](pages/api/[...path].ts)
     Most of the code deals with the configuration of the backend, and 99% of the functionality is withing these lines:
     ```typescript
     // parse the Request object into and internal AST representation
