@@ -14,6 +14,10 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     ```bash
     yarn install
     ```
+- Copy .env.local file
+    ```bash
+    cp .env.local.example .env.local
+    ```
 - Run in dev mode
     ```bash
     yarn dev
