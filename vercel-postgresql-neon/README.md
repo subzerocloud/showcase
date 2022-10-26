@@ -1,10 +1,10 @@
 # Northwind Traders (by subZero)
-### Running on Fly.io + PostgreSQL
-This is a demo of the Northwind dataset, see it live at [northwind-postgresql.fly.dev](https://northwind-postgresql.fly.dev).
+### Running on Vercel + PostgreSQL (Neon)
+This is a demo of the Northwind dataset, see it live at [northwind-postgresql.vercel.app/](https://northwind-postgresql.vercel.app/).
 - Frontend is implemented in NextJS</li>
 - Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database
 - Data is stored in a PostgreSQL database
-- Everything is deployed to [Fly.io](https://fly.io/)
+- Everything is deployed to [Vercel](https://vercel.com)
 
 This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
 
@@ -27,37 +27,29 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     open http://localhost:3000
     ```
 
-## Deploying to Fly.io
+## Deploying to Vercel
 
-
-- Create the app on Fly.io
+- Setup a PostgreSQL database on [Neon](https://neon.tech) and get a connection string
+- Provision the database
+  ```bash
+  psql <db_connection_string> -f northwindtraders.sql
+  ```
+- Link the current directory to a Vercel project
+  ```bash
+  vercel link
+  ```
+- Set the `DATABASE_URL` environment variable
+  ```bash
+    vercel env add DATABASE_URL <db_connection_string>
+    ```
+- Deploy the project
     ```bash
-    flyctl launch --no-deploy
+    vercel --prod
     ```
 
-- Create a new database
-    ```bash
-    flyctl postgres create
-    ```
 
-- Attach the database to the app
-    ```bash
-    flyctl postgres attach --app <app-name> <postgres-app-name>
-    ```
-- Proxy the db so that we can access it locally
-    ```bash
-    flyctl proxy 5432 -a <postgres-app-name>
-    ```
 
-- Populate the database
-    ```bash
-    psql postgres://postgres@localhost:<app-name> -f northwindtraders.sql
-    ```
 
-- Deploy the app
-    ```bash
-    flyctl deploy
-    ```
 
 
 ## Implementation details
