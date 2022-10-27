@@ -1,14 +1,13 @@
 # Northwind Traders (by subZero)
-### Running on Fly.io + PostgreSQL
+## Running on Fly.io + PostgreSQL
 This is a demo of the Northwind dataset, see it live at [northwind-postgresql.fly.dev](https://northwind-postgresql.fly.dev).
-- Frontend is implemented in NextJS</li>
+- Frontend is implemented in NextJS
 - Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database
 - Data is stored in a PostgreSQL database
 - Everything is deployed to [Fly.io](https://fly.io/)
 
-This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
 
-## Running locally
+### Running locally
 - Clone the repo
 - Install dependencies (you will need to have SQLite installed on your machine)
     ```bash
@@ -27,7 +26,7 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     open http://localhost:3000
     ```
 
-## Deploying to Fly.io
+### Deploying to Fly.io
 
 
 - Create the app on Fly.io
@@ -60,7 +59,7 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     ```
 
 
-## Implementation details
+### Implementation details
 
 Most of the files in this directory are your basic NextJS setup with some configuration for tailwindcss and typescript.
 The interesting files are:
@@ -77,4 +76,10 @@ The interesting files are:
     // execute the query
     const r = await db.query(query, parameters)
     ```
+
+### Credits
+
+- This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
+- Inspired by [Cloudflare D1 Demo](https://northwind.d1sql.com/)
+
 

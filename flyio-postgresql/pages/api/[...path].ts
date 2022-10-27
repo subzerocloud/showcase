@@ -16,7 +16,7 @@ const dbPool = new Pool({
     connectionString,
     max: 20,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 10000,
 })
 
 // allowed select functions can be defined here
