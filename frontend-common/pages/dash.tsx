@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import {useState} from 'react'
-import useSWR from 'swr'
 import Table from '../components/table'
-import { fetcher } from '../utils/utils'
+import { getStats } from '../utils/api'
 
 const limit = 5
 const title = 'Dashboard'
@@ -21,8 +20,7 @@ const columns = [
 const Dashboard: NextPage = () => {
     const [page, setPage] = useState(1)
     const offset = (page - 1) * limit
-    const randomInt = Math.floor(Math.random() * 1000)
-    const { data, error } = useSWR<any>(`/api/stats`, fetcher)
+    const { data, error } = getStats()
     const { rows:all_rows } = data || {}
     const total = all_rows?.length || 0
     const first = offset
