@@ -1,8 +1,7 @@
 import type { NextPage } from 'next'
 import {useState} from 'react'
-import useSWR from 'swr'
 import Table from '../components/table'
-import { fetcher } from '../utils/utils'
+import { getOrders } from '../utils/api'
 
 const limit = 20
 const title = 'Orders'
@@ -21,8 +20,7 @@ const columns = [
 const Orders: NextPage = () => {
     const [page, setPage] = useState(1)
     const offset = (page - 1) * limit
-    const options = {headers: {'Prefer': 'count=exact'}}
-    const { data, error } = useSWR<any>([`/api/Orders?select=OrderID,ShippedDate:ShippedDate::date,ShipName,ShipCity,ShipCountry,details:Order Details(ProductID,UnitPrice,Quantity)&limit=${limit}&offset=${offset}`, options], fetcher)
+    const { data, error } = getOrders(offset, limit)
     const { first, last, total, rows } = data || {}
 
     return (
