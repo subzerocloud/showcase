@@ -2,7 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  poweredByHeader: false,
+  output: 'standalone',
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.md$/,
+      use: 'raw-loader'
+    })
+    return config
+  },
   rewrites: async () => [
     {
       source: '/api/:path*',

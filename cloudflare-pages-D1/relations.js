@@ -1,6 +1,7 @@
 // While the introspection query can detect most relations automaticlly based on foreign keys,
 // in situations where they are not detected (ex: views in sqlite).
 // Custom relations can be defined here
+
 export default [
     // {
     //     "constraint_name": "tasks_project_id_fkey",

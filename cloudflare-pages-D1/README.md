@@ -1,13 +1,11 @@
 # Northwind Traders (by subZero)
 ### Running on Cloudflare&apos;s Pages + D1
 This is a demo of the Northwind dataset
-- Frontend is implemented in NextJS</li>
+- Frontend is implemented in NextJS
 - Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database
 - Data is stored in [D1](https://blog.cloudflare.com/introducing-d1) Cloudflare's SQLite compatible edge database
 - Everything is deployed to [Cloudflare Pages](https://pages.cloudflare.com/) which
   hosts the frontend and also runs the backend as a single serverless function in [Functions](https://developers.cloudflare.com/pages/platform/functions/)
-
-This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
 
 ## Running locally
 - Clone the repo
@@ -27,3 +25,9 @@ This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/no
     ```bash
     open http://localhost:3000
     ```
+
+
+### Credits
+
+- This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
+- Inspired by [Cloudflare D1 Demo](https://northwind.d1sql.com/)
