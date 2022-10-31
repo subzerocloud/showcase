@@ -11,4 +11,4 @@ services:
       - POSTGRES_DB=app
 
     volumes:
-      - "./northwindtraders.sql:/docker-entrypoint-initdb.d/northwindtraders.sql"
+      - "./northwindtraders-postgres.sql:/docker-entrypoint-initdb.d/northwindtraders-postgres.sql"

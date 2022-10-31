@@ -123,8 +123,7 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
         db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
-        const r = await db.query(query, parameters)
-        result = r.rows[0]
+        result = (await db.query(query, parameters)).rows[0]
         db.query('COMMIT')
     } catch (e) {
         throw e
