@@ -2,11 +2,17 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 EXAMPLES_DIRS=(
-    "../cloudflare-pages-D1"
-    "../flyio-postgresql"
-    "../flyio-sqlite-litefs"
-    "../vercel-postgresql-neon"
+    "cloudflare-pages-D1"
+    "flyio-postgresql"
+    "flyio-sqlite-litefs"
+    "vercel-postgresql-neon"
 )
+
+exclude_cloudflare_pages_D1=(next.config.js northwindtraders-postgres.sql )
+exclude_flyio_postgresql=("northwindtraders-sqlite.sql")
+exclude_flyio_sqlite_litefs=("northwindtraders-postgres.sql")
+exclude_vercel_postgresql_neon=("northwindtraders-sqlite.sql")
+
 cd $SCRIPT_DIR
 
 TARGET_DIR=${1%/}
@@ -34,13 +40,18 @@ copy_file () {
     FILE_NAME=$(basename $FILE)
 
     for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+        EXCLUDE_ARR_NAME="exclude_${TARGET_DIR//-/_}[@]"
+        EXCLUDE_FILES=("${!EXCLUDE_ARR_NAME}")
+        if [[ " ${EXCLUDE_FILES[@]} " =~ " ${FILE_NAME} " ]]; then
+            echo "Skipping $FILE_NAME in $TARGET_DIR"
+            continue
+        fi
+        
         # get the absolute destination path
         DESTINATION_PATH=$TARGET_DIR$DIR_NAME
-
-        #echo "Checking if destination directory exists: $DESTINATION_PATH"
         mkdir -p $DESTINATION_PATH
         echo "Copying ${FILE/$SCRIPT_DIR/} to $DESTINATION_PATH/$FILE_NAME"
-        cp -p $FILE $DESTINATION_PATH/$FILE_NAME
+        cp -p $FILE ../$DESTINATION_PATH/$FILE_NAME
     done
 }
 
