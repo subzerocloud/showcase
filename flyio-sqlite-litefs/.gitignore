@@ -38,3 +38,6 @@ next-env.d.ts
 .state
 db.sqlite
 fly.toml
+
+# wrangler cache
+.wrangler

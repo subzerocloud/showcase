@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+EXAMPLES_DIRS=(
+    "../cloudflare-pages-D1"
+    "../flyio-postgresql"
+    "../flyio-sqlite-litefs"
+    "../vercel-postgresql-neon"
+)
 cd $SCRIPT_DIR
 
 TARGET_DIR=${1%/}
 WATCH=${2:-false}
 
 if [ -z "$TARGET_DIR" ]; then
-    echo "No target directory specified"
-    exit 1
+    TARGET_DIRS=("${EXAMPLES_DIRS[@]}")
+else
+    TARGET_DIRS=("$TARGET_DIR")
+    # check if target directory exists
+    if [ ! -d "$TARGET_DIR" ]; then
+        echo "Target directory does not exist: $TARGET_DIR"
+        exit 1
+    fi
 fi
 
-# check if target directory exists
-if [ ! -d "$TARGET_DIR" ]; then
-    echo "Target directory does not exist: $TARGET_DIR"
-    exit 1
-fi
+
 
 copy_file () {
     FILE=$1
@@ -25,14 +33,15 @@ copy_file () {
     # get the file name of the file
     FILE_NAME=$(basename $FILE)
 
-    # get the absolute destination path
-    DESTINATION_PATH=$TARGET_DIR$DIR_NAME
+    for TARGET_DIR in "${TARGET_DIRS[@]}"; do
+        # get the absolute destination path
+        DESTINATION_PATH=$TARGET_DIR$DIR_NAME
 
-    
-    #echo "Checking if destination directory exists: $DESTINATION_PATH"
-    mkdir -p $DESTINATION_PATH
-    echo "Copying $FILE to $DESTINATION_PATH/$FILE_NAME"
-    cp -p $FILE $DESTINATION_PATH/$FILE_NAME
+        #echo "Checking if destination directory exists: $DESTINATION_PATH"
+        mkdir -p $DESTINATION_PATH
+        echo "Copying ${FILE/$SCRIPT_DIR/} to $DESTINATION_PATH/$FILE_NAME"
+        cp -p $FILE $DESTINATION_PATH/$FILE_NAME
+    done
 }
 
 
