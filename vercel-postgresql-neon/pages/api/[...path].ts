@@ -121,15 +121,11 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     const db = await dbPool.connect()
     query_start = performance.now()
     try {
-        const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
-        db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
         result = (await db.query(query, parameters)).rows[0]
-        db.query('COMMIT')
     } catch (e) {
         throw e
     }
     finally {
-        db.query('ROLLBACK')
         db.release()
     }
     query_end = performance.now()
