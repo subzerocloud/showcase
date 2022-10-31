@@ -13,7 +13,7 @@ import custom_relations from '../../relations.js'
 
 const argv = yargs(hideBin(process.argv)).options({
     db: { type: 'string', default: 'db.sqlite' },
-    schema: { type: 'string', default: 'northwindtraders.sql' },
+    schema: { type: 'string', default: 'northwindtraders-sqlite.sql' },
 }).parseSync()
 
 const urlPrefix = '/api'
@@ -26,7 +26,19 @@ const schemaFile = argv.schema
 // they can be used in the select parameter
 const allowed_select_functions = ['substr', 'printf']
 
-// Stup a mechanism to detect if this node is the primary node
+// we'll use this array to store queries executed by the worker and make them available in the /api/stats endpoint
+let query_log: { time: number, query: string, parameters: any[] }[] = []
+const max_log_size = 100
+
+// add event to the query log
+function log_query(query: string, parameters: any[]) {
+    query_log.unshift({ time: Date.now(), query, parameters })
+    if (query_log.length > max_log_size) {
+        query_log.pop()
+    }
+}
+
+// Setup a mechanism to detect if this node is the primary node
 // This code is specific to a LiteFS setup
 const dbFolder = dirname(dbFile)
 const liteFSprimaryFile = `${dbFolder}/.primary`
@@ -88,6 +100,12 @@ router.get('/', async (_, res) => {
     return res
 })
 
+// route to return the query log (displayed on Dahsboard)
+router.get('/stats', async (_, res) => {
+    res.status(200).json(query_log)
+    return res
+})
+
 // This function will expose a PostgREST compatible api to the underlying SQLite database
 // This is where the magic happens
 router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
@@ -131,6 +149,7 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
         // execute the query
         result = await db.get(query, parameters)
         query_end = performance.now()
+        log_query(query, parameters)
     }
     else {
         try {
@@ -143,6 +162,9 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
             if (constraints_satisfied) {
                 const { query: select_query, parameters: select_parameters } = subzero.fmtSqliteSecondStageSelect(subzeroRequest, ids, queryEnv)
                 result = await db.get(select_query, select_parameters)
+
+                log_query(mutate_query, mutate_parameters)
+                log_query(select_query, select_parameters)
             }
             else {
                 throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
@@ -191,7 +213,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        // this line is needed to make the itty-router work NodeJS request objects
+        // this line is needed to make the itty-router work with NodeJS request objects
         if (req.url && req.url[0] === '/') req.url = `http://${req.headers.host}${req.url}`
         //@ts-ignore
         await router.handle(req, res)

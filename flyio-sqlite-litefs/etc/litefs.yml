@@ -5,7 +5,7 @@ mount-dir: "/data"
 data-dir: "/mnt/data"
 
 # Execute this subprocess once LiteFS connects to the cluster. 
-exec: "node server.js --db=/data/db --schema=/northwindtraders.sql"
+exec: "node server.js --db=/data/db --schema=/northwindtraders-sqlite.sql"
 
 # The debug flag enables debug logging of all FUSE API calls.
 # debug: true

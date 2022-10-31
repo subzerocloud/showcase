@@ -62,7 +62,7 @@ COPY --from=litefs /usr/local/bin/litefs /usr/local/bin/litefs
 ADD etc/litefs.yml /etc/litefs.yml
 
 # Copy schema file
-COPY northwindtraders.sql /northwindtraders.sql
+COPY northwindtraders-sqlite.sql /northwindtraders-sqlite.sql
 
 # Setup our environment to include FUSE & SQLite.
 RUN apk add bash curl fuse sqlite

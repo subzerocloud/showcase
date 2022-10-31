@@ -64,17 +64,20 @@ This is a demo of the Northwind dataset, see it live at [northwind-postgresql.fl
 Most of the files in this directory are your basic NextJS setup with some configuration for tailwindcss and typescript.
 The interesting files are:
 
-- The file implementing [the backend](pages/api/[...path].ts)
+- The file implementing [the backend](https://github.com/subzerocloud/showcase/blob/main/flyio-postgresql/pages/api/%5B...path%5D.ts)
     Most of the code deals with the configuration of the backend, and 99% of the functionality is withing these lines:
     ```typescript
-    // parse the Request object into and internal AST representation
+    // parse the Request object into an internal AST representation
     let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, request)
     // .....
     // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmt_main_query(subzeroRequest, queryEnv)
+    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
     // .....
     // execute the query
-    const r = await db.query(query, parameters)
+    result = (await db.query(query, parameters)).rows[0]
+    // .....
+    // return the result to the client
+    res.send(result.body)
     ```
 
 ### Credits

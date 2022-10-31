@@ -123,8 +123,7 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
         db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
-        const r = await db.query(query, parameters)
-        result = r.rows[0]
+        result = (await db.query(query, parameters)).rows[0]
         db.query('COMMIT')
     } catch (e) {
         throw e
@@ -167,7 +166,7 @@ router.all('*', async (req, res) => {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     try {
-        // this line is needed to make the itty-router work NodeJS request objects
+        // this line is needed to make the itty-router work with NodeJS request objects
         if (req.url && req.url[0] === '/') req.url = `http://${req.headers.host}${req.url}`
         //@ts-ignore
         await router.handle(req, res)

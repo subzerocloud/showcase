@@ -1,12 +1,11 @@
 # Northwind Traders (by subZero)
 ### Running on Fly.io + SQLite (LiteFS)
 This is a demo of the Northwind dataset, see it live at [northwind-sqlite.fly.dev](https://northwind-sqlite.fly.dev).
-- Frontend is implemented in NextJS</li>
+- Frontend is implemented in NextJS
 - Backend is implemented in Typescript and leverages subZero as a library to automatically expose a PostgREST compatible backend on top of the underlying database
 - Data is stored in SQLite database that is replicated to all node using [LiteFS](https://fly.io/blog/introducing-litefs/)
 - Everything is deployed to [Fly.io](https://fly.io/)
 
-This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
 
 ## Running locally
 - Clone the repo
@@ -46,23 +45,32 @@ See aditional documentation about scaling and cunfiguration of [LiteFS](https://
 ## Implementation details
 
 Most of the files in this directory are your basic NextJS setup with some configuration for tailwindcss and typescript.
-The interesting files are:
-- Fly.io setup
-    Usually fly.io will detect nextjs applications and deploy automatically, however in this case wee need to setup LiteFS, which mens we need it's binary and configuration available in the container. This is the reason for having a custom [Dockerfile](Dockerfile)
-- The file implementing [the backend](pages/api/[...path].ts)
-    Most of the code deals with the configuration of the backend, and 99% of the functionality is withing these lines:
+
+The interesting parts are:
+- Usually fly.io will detect nextjs applications and deploy automatically (by creating a preconfigured Dockerfile), however in this case we need to setup LiteFS, which mens we need it's binary and configuration available in the container. This is the reason for having a custom [Dockerfile](Dockerfile)
+- The file implementing [the backend](https://github.com/subzerocloud/showcase/blob/main/flyio-sqlite-litefs/pages/api/%5B...path%5D.ts): 
+    Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, request)
+    // parse the Request object into an internal AST representation
+    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
     // .....
     // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmt_main_query(subzeroRequest, queryEnv)
+    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
     // .....
     // execute the query
     const result = await db.get(query, parameters)
+    // .....
+    // return the result to the client
+    res.send(result.body)
     ```
 
-    Aditionally there is some code specific to a LiteFS setup that periodically checks is the current node is the primary node and if not, it will redirect the request to the primary node.
-    
+- There is some code specific to a LiteFS setup that periodically checks is the current node is the primary node and if not, it will redirect the request to the primary node.
+
+
+### Credits
+
+- This dataset was sourced from [northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
+- Inspired by [Cloudflare D1 Demo](https://northwind.d1sql.com/)
+
 
 

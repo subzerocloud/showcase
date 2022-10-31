@@ -9,10 +9,12 @@ import {
     CubeIcon, //products
     HomeIcon,
     UsersIcon,
+    RectangleGroupIcon,
 } from '@heroicons/react/24/outline'
 
 const general = [
     { name: 'Home', href: '/', icon: HomeIcon },
+    { name: 'Dashboard', href: '/dash', icon: RectangleGroupIcon },
 ]
 
 const backoffice = [
