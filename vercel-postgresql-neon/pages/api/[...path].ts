@@ -121,11 +121,18 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     const db = await dbPool.connect()
     query_start = performance.now()
     try {
+        const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
+        await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
         result = (await db.query(query, parameters)).rows[0]
+        if (!result.constraints_satisfied) {
+            throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
+        }
+        await db.query('COMMIT')
     } catch (e) {
         throw e
     }
     finally {
+        await db.query('ROLLBACK')
         db.release()
     }
     query_end = performance.now()
