@@ -6,12 +6,14 @@ EXAMPLES_DIRS=(
     "flyio-postgresql"
     "flyio-sqlite-litefs"
     "vercel-postgresql-neon"
+    "netlify-postgresql-neon"
 )
 
 exclude_cloudflare_pages_D1=(next.config.js northwindtraders-postgres.sql permissions.js)
 exclude_flyio_postgresql=(northwindtraders-sqlite.sql)
 exclude_flyio_sqlite_litefs=(northwindtraders-postgres.sql)
 exclude_vercel_postgresql_neon=(northwindtraders-sqlite.sql)
+exclude_netlify_postgresql_neon=(northwindtraders-sqlite.sql)
 
 cd $SCRIPT_DIR
 

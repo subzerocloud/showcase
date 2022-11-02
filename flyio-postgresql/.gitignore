@@ -41,3 +41,7 @@ fly.toml
 
 # wrangler cache
 .wrangler
+
+
+# Local Netlify folder
+.netlify

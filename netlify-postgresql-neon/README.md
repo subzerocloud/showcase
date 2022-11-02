@@ -1,8 +1,8 @@
 # Northwind Traders (by subZero)
-## Running on Vercel + PostgreSQL (Neon)
+## Running on Netlify + PostgreSQL (Neon)
 This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
-See the live version at [northwind-postgresql.vercel.app/](https://northwind-postgresql.vercel.app/) and [source code](https://github.com/subzerocloud/showcase/tree/main/vercel-postgresql-neon) on GitHub.
+See the live version at [northwind-postgresql.netlify.app](https://northwind-postgresql.netlify.app) and [source code](https://github.com/subzerocloud/showcase/tree/main/netlify-postgresql-neon) on GitHub.
 
 ## Features / Advantages
 - Integrates in your codebase as a library (no need to deploy a separate service) 
@@ -16,9 +16,9 @@ See the live version at [northwind-postgresql.vercel.app/](https://northwind-pos
 
 ## Example details
 - Frontend is implemented in NextJS
-- Everything is deployed to [Vercel](https://vercel.com)
+- Everything is deployed to [Netlify](https://www.netlify.com)
 - Data is stored in a PostgreSQL database hosted on [Neon](https://neon.tech/)
-- The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/vercel-postgresql-neon/pages/api/%5B...path%5D.ts).
+- The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/netlify-postgresql-neon/pages/api/%5B...path%5D.ts).
     Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
     // parse the Request object into and internal AST representation
@@ -41,7 +41,7 @@ See the live version at [northwind-postgresql.vercel.app/](https://northwind-pos
     ```
  - cd to the example directory
     ```bash
-    cd showcase/vercel-postgresql-neon
+    cd showcase/netlify-postgresql-neon
     ```
 - Install dependencies
     ```bash
@@ -60,23 +60,24 @@ See the live version at [northwind-postgresql.vercel.app/](https://northwind-pos
     open http://localhost:3000
     ```
 
-## Deploying to Vercel
+## Deploying to Netlify
 - Setup a PostgreSQL database on [Neon](https://neon.tech) and get a connection string
 - Provision the database
   ```bash
   psql <db_connection_string> -f northwindtraders-postgresql.sql
   ```
-- Link the current directory to a Vercel project
-  ```bash
-  vercel link
-  ```
-- Set the `DATABASE_URL` environment variable
-  ```bash
-    vercel env add DATABASE_URL <db_connection_string>
-    ```
-- Deploy the project
+
+- Netlify init (we use --manual to avoid linking the Github repo to Netlify)
     ```bash
-    vercel --prod
+    netlify init --manual
+    ```
+- Add db env variable
+    ```bash
+    netlify env:set DATABASE_URL <db_connection_string>
+    ```
+- Deploy to Netlify (Due to NextJS plugin, build and deploy need to be done in one command when deploying manually)
+    ```bash
+    netlify deploy --build --prod
     ```
 
 ## Credits

@@ -10,6 +10,7 @@ This repository is a showcases the functionality and versatility of the new Rust
 - [flyio-sqlite-litefs](flyio-sqlite-litefs) - A example of a Fly.io deployment with data storred in a SQLite database that is replicated between nodes using LiteFS.
 - [flyio-postgresql](flyio-postgresql) - A example of a Fly.io deployment with data storred in a PostgreSql database (also hosted on fly.io).
 - [vercel-postgresql-neon](vercel-postgresql-neon) - A example of a Vercel deployment with data storred in a PostgreSql database hosted by Neon.
+- [netlify-postgresql-neon](netlify-postgresql-neon) - A example of a Netlify deployment with data storred in a PostgreSql database hosted by Neon.
 
 
 ## Strengths

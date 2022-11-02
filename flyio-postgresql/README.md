@@ -43,7 +43,7 @@ See the live version at [northwind-postgresql.fly.dev](https://northwind-postgre
     ```bash
     cd showcase/flyio-postgresql
     ```
-- Install dependencies (you will need to have SQLite installed on your machine)
+- Install dependencies
     ```bash
     yarn install
     ```
