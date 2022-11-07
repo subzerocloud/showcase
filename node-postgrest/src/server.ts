@@ -187,7 +187,7 @@ router.all(`${apiPrefix}/:url_schema?/:table`, async (req: IncomingMessage & { u
 
     // parse the Request object into and internal AST representation
     const prefix = `${apiPrefix}/${url_schema ? url_schema + '/' : ''}`
-    const subzeroRequest = await subzero.parse(schema, prefix, role, req)
+    const subzeroRequest = await subzero.parse(schema, prefix, role, req, dbMaxRows)
     const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
     // generate the SQL query from the AST representation
     const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
