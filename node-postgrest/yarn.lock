@@ -309,8 +309,10 @@ static-eval@2.0.2:
   dependencies:
     escodegen "^1.8.1"
 
-"subzerocloud@file:../../subzero-core/subzero-node":
-  version "0.1.3"
+subzerocloud@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/subzerocloud/-/subzerocloud-0.1.4.tgz#7ada5668ab4ab6bdcce87c220bd699cc09e270b1"
+  integrity sha512-cc3G6n6gkzedUfjhec1/3qdnuQv4bLt3wq8ejbGaJYFVR9Zn1kn7c+HBee4krqkaKT3MdRhEcoSy9DA2iUtzJw==
 
 type-check@~0.3.2:
   version "0.3.2"

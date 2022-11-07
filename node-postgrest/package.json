@@ -4,7 +4,7 @@
     "dev": "yarn build; yarn db & yarn start && kill $!",
     "build": "tsc",
     "watch": "tsc -w",
-    "start": "node -r dotenv/config dist/server.js",
+    "start": "node dist/server.js",
     "db": "docker-compose run --rm --service-ports db &> /dev/null"
   },
   "devDependencies": {

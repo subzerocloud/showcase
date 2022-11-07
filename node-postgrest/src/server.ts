@@ -3,8 +3,9 @@ import pg from 'pg'
 const {Pool} = pg
 import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, fmtPostgreSqlEnv, statusFromPgErrorCode } from 'subzerocloud'
 import { Router } from 'itty-router'
-import * as jwt from 'jsonwebtoken'
-import * as jp from 'jsonpath'
+import jsonwebtoken from 'jsonwebtoken'
+const { verify } = jsonwebtoken;
+import jp from 'jsonpath'
 
 // read the configuration parameters from env variables
 const env = (name: string, defaultValue?: any) => process.env[`PGRST_${name.toUpperCase().replace(/-/g,'_')}`] || defaultValue
@@ -176,7 +177,7 @@ router.all(`${apiPrefix}/:url_schema?/:table`, async (req: IncomingMessage & { u
     // pass env values that should be available in the query context
     // used on the query format stage
     let queryEnv: QueryEnv = [
-        ['role', role], // this enables the query to be executed with the privileges of the role (which is a database role)
+        ['role', role],
         ['search_path', dbExtraSearchPath],
         ['request.method', method],
         ['request.headers', JSON.stringify(req.headers)],
@@ -185,7 +186,7 @@ router.all(`${apiPrefix}/:url_schema?/:table`, async (req: IncomingMessage & { u
     ]
 
     // parse the Request object into and internal AST representation
-    const prefix = `${apiPrefix}/${url_schema?url_schema+'/':''}`
+    const prefix = `${apiPrefix}/${url_schema ? url_schema + '/' : ''}`
     const subzeroRequest = await subzero.parse(schema, prefix, role, req)
     const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
     // generate the SQL query from the AST representation
@@ -250,8 +251,8 @@ const server = createServer(async (req, res) => {
             if (token) {
                 // the token is expected to be a JWT token
                 // verify throws an error if the token is invalid
-                const decoded = jwt.verify(token, jwtSecret, {audience: jwtAud,})
-                const role = jp.query(decoded, jwtRoleClaimKey)[0] || dbAnonRole
+                const decoded = verify(token, jwtSecret, { audience: jwtAud, })
+                const role = jp.query(decoded, '$'+jwtRoleClaimKey)[0] || dbAnonRole
                 context.role = role
                 context.jwt_claims = decoded
             }
@@ -262,6 +263,7 @@ const server = createServer(async (req, res) => {
     
     } catch (e: any) {
         // handle errors thrown by the route handlers
+        console.error(e)
         if (e instanceof SubzeroError) {
             res.writeHead(e.status, {
                 'content-type': 'application/json',
