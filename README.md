@@ -12,6 +12,7 @@ This repository is a showcases the functionality and versatility of the new Rust
 - [vercel-postgresql-neon](vercel-postgresql-neon) - A example of a Vercel deployment with data stored in a PostgreSql database hosted by Neon.
 - [netlify-postgresql-neon](netlify-postgresql-neon) - A example of a Netlify deployment with data stored in a PostgreSql database hosted by Neon.
 - [deno-postgresql-neon](deno-postgresql-neon) - A example of a Deno deployment with data stored in a PostgreSql database hosted by Neon.
+- [node-postgrest](node-postgrest) - This is a TypeScript implementation that can be used as an (extensible) drop-in replacement for PostgREST. Use it as a starting point and extend with custom routes and business logic.
 
 
 ## Strengths
