@@ -5,7 +5,7 @@ import { getProducts } from '../utils/api'
 
 const limit = 20
 const title = 'Products'
-const idColumn = 'Id'
+const idColumn = 'ProductID'
 const avatarColumn = undefined //'ContactName'
 const columns = [
     { name: 'ProductName', header: 'Name' },

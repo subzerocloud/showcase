@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn dev_db & next dev & yarn deno_run && kill $!",
-    "dev_db": "docker-compose run --rm --service-ports db  > /dev/null",
+    "dev_db": "docker-compose run --rm --service-ports db  &> /dev/null",
     "deno_run": "deno run --allow-env --allow-net --allow-read=.env,.env.defaults,out  deno/server.ts",
     "dev_deno": "yarn dev_db & yarn deno_run && kill $!",
     "build": "next build && next export"

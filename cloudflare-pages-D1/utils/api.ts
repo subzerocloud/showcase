@@ -37,7 +37,7 @@ export function getOrders(offset: number, limit: number) {
 }
 
 export function getEmployees(offset: number, limit: number) {
-    return useSWR<any>([`${apiBaseUrl}/Employees?select=Name:$printf('%s %s', FirstName, LastName),Title,Address,City,Country&limit=${limit}&offset=${offset}`, common_options], fetcher)
+    return useSWR<any>([`${apiBaseUrl}/Employees?select=EmployeeID,Name:$printf('%s %s', FirstName, LastName),Title,Address,City,Country&limit=${limit}&offset=${offset}`, common_options], fetcher)
 }
 
 export function getStats() {

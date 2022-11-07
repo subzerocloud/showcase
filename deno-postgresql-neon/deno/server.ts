@@ -4,7 +4,7 @@ import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.159.0/http/file_server.ts";
 import { Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
 // @deno-types="../node_modules/subzerocloud/dist/index.d.ts"
-import { Subzero, SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader } from '../node_modules/subzerocloud/dist/index.js'
+import { Subzero, SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '../node_modules/subzerocloud/dist/index.js'
 // @deno-types="../node_modules/itty-router/dist/itty-router.d.ts"
 import { Router } from '../node_modules/itty-router/dist/itty-router.min.mjs'
 import permissions from '../permissions.js'
@@ -37,8 +37,8 @@ function log_query(query: string, parameters: any[]) {
 
 // this function initializes the subzero instance that is responsible for parsing and formatting the queries
 let subzero: Subzero
-async function init_subzero() {
-    console.log('init_subzero')
+async function initSubzero() {
+    console.log('initSubzero')
     
     const { query , parameters } = getIntrospectionQuery(
         dbType, // database type
@@ -82,7 +82,7 @@ router.get('/stats', () => {
     })
 })
 
-// This function will expose a PostgREST compatible api to the underlying SQLite database
+// This function will expose a PostgREST compatible api to the underlying database
 // This is where the magic happens
 router.all('/:table', async (req: Request) => {
     let parse_start = 0, parse_end = 0, query_start = 0, query_end = 0, format_start = 0, format_end = 0; // used for performance measurements
@@ -98,13 +98,16 @@ router.all('/:table', async (req: Request) => {
 
     // initialize the subzero instance if it is not initialized yet
     if (!subzero) {
-        await init_subzero()
+        await initSubzero()
     }
 
     // pass env values that should be available in the query context
     // used on the query format stage
     const queryEnv: Env = [
-        // ['role', role], // uncomment this line to have the query executed with the privileges of the role (a.k.a. use PG's permission system)
+        ['role', role],
+        ['request.method', method],
+        ['request.headers', JSON.stringify(req.headers)],
+        ['request.get', JSON.stringify(url.searchParams)],
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 
@@ -114,6 +117,7 @@ router.all('/:table', async (req: Request) => {
     parse_end = performance.now()
 
     format_start = performance.now()
+    // const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv) // uncomment if you rely on pg permissions
     // generate the SQL query from the AST representation
     const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
     format_end = performance.now()
@@ -121,25 +125,21 @@ router.all('/:table', async (req: Request) => {
     let result
     const db = await dbPool.connect()
     query_start = performance.now()
-    let transaction
+    const read_only = method === 'GET' ? true : false
+    const transaction = db.createTransaction("transaction_x", {isolation_level: 'read_committed',read_only})
     try {
-        if (method === 'GET') { 
-            result = (await db.queryObject(query, parameters)).rows[0]
+        await transaction.begin()
+        //await db.queryObject(envQuery, envParameters) // uncomment if you rely on pg permissions
+        result = (await transaction.queryObject<any>(query, parameters)).rows[0]
+        if (!result.constraints_satisfied) {
+            throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
         }
-        else {
-            transaction = db.createTransaction("transaction_1");
-            await transaction.begin()
-            result = (await db.queryObject<any>(query, parameters)).rows[0]
-            if (!result.constraints_satisfied) {
-                throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
-            }
-            await transaction.commit()
-        }
+        await transaction.commit()
     } catch (e) {
+        await transaction.rollback()
         throw e
     }
     finally {
-        if (method !== 'GET') { transaction && await transaction.rollback() }
         db.release()
     }
     query_end = performance.now()
@@ -161,10 +161,7 @@ router.all('/:table', async (req: Request) => {
         'x-format-time': `${(format_end - format_start).toFixed(2)}ms`,
     }
 
-    return new Response(body, {
-        status,
-        headers
-    })
+    return new Response(body, {status,headers})
 })
 
 // catch all handler (404)

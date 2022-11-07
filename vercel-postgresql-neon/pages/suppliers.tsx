@@ -5,7 +5,7 @@ import { getSuppliers } from '../utils/api'
 
 const limit = 20
 const title = 'Suppliers'
-const idColumn = 'CustomerId'
+const idColumn = 'SupplierID'
 const avatarColumn = 'ContactName'
 const columns = [
     { name: 'CompanyName', header: 'Company' },

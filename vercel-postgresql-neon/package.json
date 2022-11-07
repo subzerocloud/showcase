@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "docker-compose run --rm --service-ports db > /dev/null & next dev && kill $!",
+    "dev": "docker-compose run --rm --service-ports db &> /dev/null & next dev && kill $!",
     "build": "next build",
     "start": "next start"
   },

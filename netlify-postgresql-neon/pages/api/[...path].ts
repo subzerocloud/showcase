@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 import { Pool } from 'pg'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
+import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from 'subzerocloud'
 import { Router } from 'itty-router'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
@@ -39,8 +39,8 @@ function log_query(query: string, parameters: any[]) {
 
 // this function initializes the subzero instance that is responsible for parsing and formatting the queries
 let subzero: Subzero
-async function init_subzero() {
-    console.log('init_subzero')
+async function initSubzero() {
+    console.log('initSubzero')
     
     const { query , parameters } = getIntrospectionQuery(
         dbType, // database type
@@ -51,10 +51,7 @@ async function init_subzero() {
             ['permissions.json', permissions],
         ])
     )
-    //console.log(query, parameters)
-    const db = await dbPool.connect()
-    const result = await db.query(query, parameters)
-    db.release()
+    const result = await dbPool.query(query, parameters)
 
     // the result of the introspection query is a json string representation of the database schema/structure
     // this schema object is used to generate the queries and check the permissions
@@ -79,7 +76,7 @@ router.get('/stats', async (_, res) => {
     return res
 })
 
-// This function will expose a PostgREST compatible api to the underlying SQLite database
+// This function will expose a PostgREST compatible api to the underlying database
 // This is where the magic happens
 router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     let parse_start = 0, parse_end = 0, query_start = 0, query_end = 0, format_start = 0, format_end = 0; // used for performance measurements
@@ -95,13 +92,15 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
 
     // initialize the subzero instance if it is not initialized yet
     if (!subzero) {
-        await init_subzero()
+        await initSubzero()
     }
 
     // pass env values that should be available in the query context
     // used on the query format stage
     let queryEnv: QueryEnv = [
-        // ['role', role], // uncomment this line to have the query executed with the privileges of the role (a.k.a. use PG's permission system)
+        ['role', role],
+        ['request.method', method],
+        ['request.headers', JSON.stringify(req.headers)],
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 
@@ -110,9 +109,8 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
     parse_end = performance.now()
 
-    
-    
     format_start = performance.now()
+    //const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
     // generate the SQL query from the AST representation
     const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
     format_end = performance.now()
@@ -122,17 +120,18 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     query_start = performance.now()
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
-        if (method !== 'GET') { await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`) }
+        await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
+        //await db.query(envQuery, envParameters)
         result = (await db.query(query, parameters)).rows[0]
         if (!result.constraints_satisfied) {
             throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
         }
-        if (method !== 'GET') { await db.query('COMMIT') }
+        await db.query('COMMIT')
     } catch (e) {
+        await db.query('ROLLBACK')
         throw e
     }
     finally {
-        if (method !== 'GET') { await db.query('ROLLBACK') }
         db.release()
     }
     query_end = performance.now()
