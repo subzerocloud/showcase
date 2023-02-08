@@ -2,7 +2,7 @@
 ## Running on Deno Deploy + PostgreSQL (Neon)
 This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
-See the live version at [northwind-postgresql.deno.app](https://northwind-postgresql.deno.app) and [source code](https://github.com/subzerocloud/showcase/tree/main/deno-postgresql-neon) on GitHub.
+See the [source code](https://github.com/subzerocloud/showcase/tree/main/deno-postgresql-neon) on GitHub.
 
 ## Features / Advantages
 - Integrates in your codebase as a library (no need to deploy a separate service) 

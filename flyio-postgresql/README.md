@@ -82,7 +82,7 @@ See the live version at [northwind-postgresql.fly.dev](https://northwind-postgre
 
 - Populate the database
     ```bash
-    psql postgres://postgres@localhost:<app-name> -f northwindtraders.sql
+    psql postgres://postgres@localhost:<app-name> -f northwindtraders-postgres.sql
     ```
 
 - Deploy the app
