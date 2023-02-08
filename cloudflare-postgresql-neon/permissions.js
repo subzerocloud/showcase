@@ -14,6 +14,20 @@ export default [
     { "table_schema": "public", "table_name": "Customer", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
     { "table_schema": "public", "table_name": "Order Details", "role": "public", "grant": ["select"], "using": [{ "sql": "true" }] },
 
+    // allow select and insert (on specific columns) for the Categories table
+    // try inserting a new category with the following curl command:
+    // curl -X POST -H "Content-Type: application/json" -H "Prefer: return=representation" -d '{"CategoryName":"Ice Cream"}' "http://localhost:3000/api/Categories?select=CategoryID,CategoryName"
+    { "table_schema": "public", "table_name": "Categories", "role": "public", "grant": ["select"] },
+    { "table_schema": "public", "table_name": "Categories", "role": "public", "grant": ["insert"], "columns": ["CategoryName", "Description"] },
+    {
+        "table_schema": "public", "table_name": "Categories", "role": "public",
+        "policy_for": ["all"],
+        // can see all categories
+        "using": [{ "sql": "true" }],
+        // can insert only a "Ice Cream" as a new category
+        "check": [{"column":"CategoryName","op":"=","val":"Ice Cream"}]
+    },
+
     // other examples
     // {
     //     "name": "public can see rows marked as public",
