@@ -1,0 +1,15 @@
+# Top-level configuration
+
+name = "cloudflare-pages-d1"
+compatibility_date = "2022-07-12"
+
+# kv_namespaces = [
+#     { binding = "<MY_NAMESPACE>", id = "<KV_ID>" }
+# ]
+
+[[ d1_databases ]]
+binding = "DB"
+database_name = "db"
+database_id = ""
+
+

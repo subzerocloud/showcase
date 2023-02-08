@@ -32,7 +32,8 @@ This repository is a showcases the functionality and versatility of the new Rust
 - [x] Core functions/types
 - [x] PostgreSQL backend (including YugabyteDB, CockroachDB, TimescaleDB, etc)
 - [x] SQLite backend (including Cloudflare D1)
-- [x] ClickHouse backend
+- [x] MySQL backend (PlanetScaleDB upcoming)
+- [x] ClickHouse backend (read only)
 - [x] REST api (PostgREST compatible)
 - [x] Production ready code
 - [x] Stable library interface
