@@ -1,5 +1,5 @@
 // this is a catch-all function that is called for every request to the api
-
+import { Pool } from '@neondatabase/serverless'
 import { Router } from 'itty-router'
 import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
 import permissions from '../../permissions.js'
@@ -7,11 +7,12 @@ import custom_relations from '../../relations.js'
 
 const urlPrefix = '/api'
 const publicSchema = 'public'
-const dbType = 'sqlite'
+const dbType = 'postgresql'
+let dbPool
 
 // allowed select functions can be defined here
 // they can be used in the select parameter
-const allowed_select_functions = ['substr', 'printf']
+const allowed_select_functions = ['substr', 'concat']
 
 // we'll use this array to store queries executed by the worker and make them available in the /api/stats endpoint
 let query_log: { time: number, query: string, parameters: any[] }[] = []
@@ -28,24 +29,32 @@ function log_query(query: string, parameters: any[]) {
 // this function initializes the subzero instance that is responsible for parsing and formatting the queries
 let subzero: Subzero
 async function init_subzero(env) {
-    const { query /*, parameters*/ } = getIntrospectionQuery(
+    console.log('initSubzero')
+    dbPool = new Pool({
+        connectionString: env.DATABASE_URL,
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 10000,
+    })
+    
+    const { query , parameters } = getIntrospectionQuery(
         dbType, // database type
-        publicSchema, // the schema name that is exposed to the HTTP api (ex: public, api), though in case of sqlite this is ignored
-
+        publicSchema, // the schema name that is exposed to the HTTP api (ex: public, api)
         // the introspection query has two 'placeholders' in order to be able adapt to different configurations
         new Map([
             ['relations.json', custom_relations],
             ['permissions.json', permissions],
         ])
     )
-    // although we have parameters, they are not used in the introspection query in sqlite
-    // because the parameters refer to the "db schema" concept which missing in sqlite
-    const statement = env.DB.prepare(query)//.bind(...parameters)
-    const result = await statement.first()
+    //console.log(query, parameters)
+    const db = await dbPool.connect()
+    const result = await db.query(query, parameters)
+    db.release()
+
     // the result of the introspection query is a json string representation of the database schema/structure
     // this schema object is used to generate the queries and check the permissions
     // to make the function startup faster, one can cache the schema object in a KV store
-    const schema = JSON.parse(result.json_schema)
+    const schema = JSON.parse(result.rows[0].json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
 }
 
@@ -97,19 +106,39 @@ router.all('/:table', async (req:Request, { env }) => {
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     log_query(query, parameters)
 
-    // prepare the statement
-    const statement = env.DB.prepare(query).bind(...parameters)
-
+    let result
+    const db = await dbPool.connect()
     const query_start = Date.now()
-    // the generated query always returns one row
-    const result = await statement.first()
+    try {
+        const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
+        // let [_b, q, _c] = await Promise.all([
+        //     db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`),
+        //     db.query(query, parameters),
+        //     db.query('COMMIT')
+        // ])
+        // result = q.rows[0]
+        // if (!result.constraints_satisfied) {
+        //     throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
+        // }
+        await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
+        //await db.query(envQuery, envParameters)
+        result = (await db.query(query, parameters)).rows[0]
+        if (!result.constraints_satisfied) {
+            throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
+        }
+        await db.query('COMMIT')
+    } catch (e) {
+        await db.query('ROLLBACK')
+        throw e
+    }
+    finally {
+        db.release()
+    }
     const query_end = Date.now()
 
     const body = result.body // this is a json string

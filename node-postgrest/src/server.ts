@@ -6,6 +6,10 @@ import { Router } from 'itty-router'
 import jsonwebtoken from 'jsonwebtoken'
 const { verify } = jsonwebtoken;
 import jp from 'jsonpath'
+import morgan from 'morgan'
+import finalhandler from 'finalhandler'
+const logger = morgan('combined')
+
 
 // read the configuration parameters from env variables
 const env = (name: string, defaultValue?: any) => process.env[`PGRST_${name.toUpperCase().replace(/-/g,'_')}`] || defaultValue
@@ -24,8 +28,9 @@ const dbPoolTimeout = env('db-pool-timeout', 3600)
 // db-prepared-statements=true
 const dbSchemas = env('db-schemas', 'public').split(',')
 // db-tx-end=commit
+
 const dbUri = env('db-uri', 'postgresql://')
-// db-use-legacy-gucs=true
+// db-use-legacy-gucs=false
 const jwtAud = env('jwt-aud')
 const jwtRoleClaimKey = env('jwt-role-claim-key', '.role')
 const jwtSecretIsBase64 = env('jwt-secret-is-base64', false)
@@ -45,11 +50,20 @@ const apiPrefix = env('api-prefix', '')
 // allowed select functions can be defined here
 // they can be used in the select parameter, ex:
 // select=id,sku:$concat('#',id),name
-const allowedSelectFunctions = env('allowed-select-functions', '').split(',')
+const defaultSelectFunctions = [
+    "avg", "count", "every", "max", "min", "sum",
+    "array_agg", "json_agg", "jsonb_agg", "json_object_agg", "jsonb_object_agg", "string_agg",
+    "corr", "covar_pop", "covar_samp", "regr_avgx",
+    "regr_avgy", "regr_count", "regr_intercept", "regr_r2", "regr_slope", "regr_sxx", "regr_sxy", "regr_syy",
+    "mode", "percentile_cont", "percentile_cont", "percentile_disc", "percentile_disc",
+    "row_number", "rank", "dense_rank", "cume_dist", "percent_rank", "first_value", "last_value", "nth_value",
+    "lower", "trim", "upper", "concat", "concat_ws", "format", "substr", "ceil", "truncate",
+    "date_diff", "toHour", "dictGet", "dictHas", "dictGetOrDefault", "toUInt64"
+]
+const allowedSelectFunctions = env('allowed-select-functions', defaultSelectFunctions.join(',')).split(',')
 const dbConnectionTimeout = env('db-connection-timeout', 10)
 const dbMaxConnectionRetries = env('db-max-connection-retries', 0)
 const dbMaxConnectionRetryInterval = env('db-max-connection-retry-interval', 10)
-
 // you can use internal permissions that can be either hardcoded here or loaded from a file
 // see other examples for more details
 //import permissions from 'permissions.js'
@@ -185,12 +199,11 @@ router.all(`${apiPrefix}/:url_schema?/:table`, async (req: IncomingMessage & { u
         ['request.jwt.claims', JSON.stringify(context.jwt_claims || {})],
     ]
 
-    // parse the Request object into and internal AST representation
     const prefix = `${apiPrefix}/${url_schema ? url_schema + '/' : ''}`
-    const subzeroRequest = await subzero.parse(schema, prefix, role, req, dbMaxRows)
+    // generate the SQL query that sets the env variables for the current request
     const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(schema, prefix, role, req, queryEnv, dbMaxRows)
 
     let result
     const db = await dbPool.connect()
@@ -234,54 +247,61 @@ router.all('*', async (_, res) => {
 
 // create the server
 const server = createServer(async (req, res) => {
-    try {
-        // this line is needed to make the itty-router work with NodeJS request objects
-        if (req.url && req.url[0] === '/') req.url = `http://${req.headers.host}${req.url}`
+    const done = finalhandler(req, res)
+    logger(req, res, async function (err) {
+        if (err) return done(err)
+    
+        // respond to request
+        try {
+            // this line is needed to make the itty-router work with NodeJS request objects
+            if (req.url && req.url[0] === '/') req.url = `http://${req.headers.host}${req.url}`
 
-        // create a context object
-        // this object is passed to the handlers
-        const context: any = {
-            role: dbAnonRole
-        }
-        // the JWT token is passed in the Authorization header
-        // the token is expected to be in the format: Bearer <token>
-        const authHeader = req.headers.authorization
-        if (authHeader) {
-            const token = authHeader.split(' ')[1]
-            if (token) {
-                // the token is expected to be a JWT token
-                // verify throws an error if the token is invalid
-                const decoded = verify(token, jwtSecret, { audience: jwtAud, })
-                const role = jp.query(decoded, '$'+jwtRoleClaimKey)[0] || dbAnonRole
-                context.role = role
-                context.jwt_claims = decoded
+            // create a context object
+            // this object is passed to the handlers
+            const context: any = {
+                role: dbAnonRole
+            }
+            // the JWT token is passed in the Authorization header
+            // the token is expected to be in the format: Bearer <token>
+            const authHeader = req.headers.authorization
+            if (authHeader) {
+                const token = authHeader.split(' ')[1]
+                if (token) {
+                    // the token is expected to be a JWT token
+                    // verify throws an error if the token is invalid
+                    const decoded = verify(token, jwtSecret, { audience: jwtAud, })
+                    const role = jp.query(decoded, '$'+jwtRoleClaimKey)[0] || dbAnonRole
+                    context.role = role
+                    context.jwt_claims = decoded
+                }
+            }
+
+            //@ts-ignore
+            await router.handle(req, res, context)
+        
+        } catch (e: any) {
+            // handle errors thrown by the route handlers
+            // console.error(e)
+            if (e instanceof SubzeroError) {
+                res.writeHead(e.status, {
+                    'content-type': 'application/json',
+                }).end(e.toJSONString())
+            }
+            else if (e.severity && e.code) {
+                // this is a Postgres error
+                const status = statusFromPgErrorCode(e.code)
+                res.writeHead(status, {
+                    'content-type': 'application/json',
+                }).end(JSON.stringify({ message: e.message, detail: e.detail, hint: e.hint }))
+            }
+            else {
+                res.writeHead(500, {
+                    'content-type': 'application/json',
+                }).end(JSON.stringify({ message: e.message }))
             }
         }
-
-        //@ts-ignore
-        await router.handle(req, res, context)
+    })
     
-    } catch (e: any) {
-        // handle errors thrown by the route handlers
-        console.error(e)
-        if (e instanceof SubzeroError) {
-            res.writeHead(e.status, {
-                'content-type': 'application/json',
-            }).end(e.toJSONString())
-        }
-        else if (e.severity && e.code) {
-            // this is a Postgres error
-            const status = statusFromPgErrorCode(e.code)
-            res.writeHead(status, {
-                'content-type': 'application/json',
-            }).end(JSON.stringify({ message: e.message, detail: e.detail, hint: e.hint }))
-        }
-        else {
-            res.writeHead(500, {
-                'content-type': 'application/json',
-            }).end(JSON.stringify({ message: e.message }))
-        }
-    }
 })
 
 

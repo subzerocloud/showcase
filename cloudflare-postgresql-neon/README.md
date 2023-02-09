@@ -1,8 +1,8 @@
 # Northwind Traders (by subZero)
-## Running on Cloudflare&apos;s Pages + D1
+## Running on Cloudflare&apos;s Pages + PostgreSQL (Neon)
 This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
-See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-pages-D1) on GitHub.
+See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-postgresql-neon) on GitHub.
 
 
 
@@ -19,16 +19,13 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
 ## Example details
 - Frontend is implemented in NextJS
 - Everything is deployed to [Cloudflare Pages](https://pages.cloudflare.com/)
-- Data is stored in [D1](https://blog.cloudflare.com/introducing-d1) Cloudflare's SQLite compatible edge database
+- Data is stored in a PostgreSQL database hosted on [Neon](https://neon.tech/)
  
-- The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/cloudflare-pages-D1/functions/api/%5B%5Bpath%5D%5D.ts) (see [Cloudflare Functions](https://developers.cloudflare.com/pages/platform/functions/) for details). 
+- The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/cloudflare-postgresql-neon/functions/api/%5B%5Bpath%5D%5D.ts) (see [Cloudflare Functions](https://developers.cloudflare.com/pages/platform/functions/) for details). 
     Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
-    // parse the HTTP Request object into an internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-    // .....
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     // .....
     // prepare the statement
     const statement = env.DB.prepare(query).bind(...parameters)
@@ -43,15 +40,15 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
     ```
  - cd to the example directory
     ```bash
-    cd showcase/cloudflare-pages-D1
+    cd showcase/cloudflare-postgresql-neon
     ```
 - Install dependencies (you will need to have SQLite installed on your machine)
     ```bash
     yarn install
     ```
-- Populate the database
+- Copy .dev.vars file and set the DATABASE_URL environment variable to your neon database connection string
     ```bash
-    yarn seed
+    cp .dev.vars.example .dev.vars
     ```
 - Run in dev mode
     ```bash

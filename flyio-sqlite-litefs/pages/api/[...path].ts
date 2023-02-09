@@ -128,13 +128,11 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     // pass env values that should be available in the query context
     // used on the query format stage
     let queryEnv: QueryEnv = [
+        ['role', role],
+        ['request.method', method],
+        ['request.headers', JSON.stringify(req.headers)],
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
-
-    parse_start = performance.now()
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-    parse_end = performance.now()
 
     // in case of SQLite, we need to handle mutate request in two steps since SQLite does not support RETURNING inside a CTE
     // for other databses, only the code in the GET block is sufficient
@@ -142,8 +140,8 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     if (method == 'GET') {
     
         format_start = performance.now()
-        // generate the SQL query from the AST representation
-        const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+        // generate the SQL query from request object
+        const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
         format_end = performance.now()
         query_start = performance.now()
         // execute the query
@@ -154,21 +152,12 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     else {
         try {
             db.run('BEGIN')
-            const { query: mutate_query, parameters: mutate_parameters } = subzero.fmtSqliteMutateQuery(subzeroRequest, queryEnv)
-            const r = await db.all(mutate_query, mutate_parameters)
-            const ids = r.map((r) => r[Object.keys(r)[0]].toString())
-            const isDelete = method == 'DELETE'
-            const constraints_satisfied = isDelete ? true : r.every((r) => r['_subzero_check__constraint'] == 1)
-            if (constraints_satisfied) {
-                const { query: select_query, parameters: select_parameters } = subzero.fmtSqliteSecondStageSelect(subzeroRequest, ids, queryEnv)
-                result = await db.get(select_query, select_parameters)
-
-                log_query(mutate_query, mutate_parameters)
-                log_query(select_query, select_parameters)
-            }
-            else {
-                throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
-            }
+            const statement = await subzero.fmtSqliteTwoStepStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
+            const { query: mutate_query, parameters: mutate_parameters } = statement.fmtMutateStatement()
+            const mutate_result = await db.all(mutate_query, mutate_parameters);
+            statement.setMutatedRows(mutate_result);
+            const { query: select_query, parameters: select_parameters } = statement.fmtSelectStatement();
+            const result = await db.get(select_query, select_parameters);
             db.run('COMMIT')
         } catch (e) {
             db.run('ROLLBACK')

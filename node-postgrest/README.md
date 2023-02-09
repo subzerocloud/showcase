@@ -7,9 +7,22 @@ PostgREST will give you a powerfull REST API for your PostgreSQL database howeve
 This is where this project comes in. It allows you to implement your business logic in JavaScript and still use the same REST API as PostgREST.
 
 ## Try it out
-- Bring up the docker-compose stack
+- Clone the repo
     ```bash
-    docker-compose up -d
+    git clone https://github.com/subzerocloud/showcase.git
+    ```
+ - cd to the example directory
+    ```bash
+    cd showcase/node-postgrest
+    ```
+- Install dependencies
+    ```bash
+    yarn install
+    ```
+- Run in dev mode
+    Note: A postgres database will be started in background using docker-compose and populated with the Northwind database schema from `db` directory. You can swap this out with your own database schema.
+    ```bash
+    yarn dev
     ```
 - Try some requests
     - As an anonymous user

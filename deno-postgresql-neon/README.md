@@ -21,11 +21,8 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/deno-po
 - The backend is a [Deno server](https://github.com/subzerocloud/showcase/blob/main/deno-postgresql-neon/deno/server.ts) that serves both the static frontend files and the the api.
     Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-    // .....
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     // .....
     // execute the query
     result = (await db.queryObject(query, parameters)).rows[0]

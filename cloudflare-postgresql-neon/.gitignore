@@ -42,6 +42,7 @@ fly.toml
 
 # wrangler cache
 .wrangler
+.dev.vars
 
 
 # Local Netlify folder

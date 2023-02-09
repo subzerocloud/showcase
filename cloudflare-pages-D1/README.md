@@ -24,16 +24,19 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
 - The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/cloudflare-pages-D1/functions/api/%5B%5Bpath%5D%5D.ts) (see [Cloudflare Functions](https://developers.cloudflare.com/pages/platform/functions/) for details). 
     Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
-    // parse the HTTP Request object into an internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-    // .....
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     // .....
     // prepare the statement
     const statement = env.DB.prepare(query).bind(...parameters)
     // execute the query
     const result = await statement.first()
+    // ...
+    // this is a json string
+    const body = result.body
+    // ...
+    // return the response
+    return new Response(body, { /* ... */})
     ```
 
 ## Running locally

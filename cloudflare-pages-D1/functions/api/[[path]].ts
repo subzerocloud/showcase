@@ -97,11 +97,9 @@ router.all('/:table', async (req:Request, { env }) => {
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     log_query(query, parameters)
 
     // prepare the statement

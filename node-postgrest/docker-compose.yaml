@@ -6,26 +6,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=app
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
 
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
-  subzero:
-    container_name: subzero-postgrest
-    image: subzero-postgrest
-    ports:
-      - "3000:3000"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    # vars are set in the .env file
-    environment:
-      PGRST_DB_URI: "postgres://postgres:pass@db:5432/app"
-      PGRST_SERVER_HOST: "0.0.0.0"
-      PGRST_JWT_SECRET: "${PGRST_JWT_SECRET}"
-      PGRST_DB_ANON_ROLE: "${PGRST_DB_ANON_ROLE}"
-      PGRST_DB_SCHEMAS: "${PGRST_DB_SCHEMAS}"

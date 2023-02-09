@@ -104,15 +104,9 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 
-    parse_start = performance.now()
-    // parse the Request object into and internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
-    parse_end = performance.now()
-
     format_start = performance.now()
-    //const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     format_end = performance.now()
 
     let result
@@ -121,7 +115,6 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
         await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
-        //await db.query(envQuery, envParameters)
         result = (await db.query(query, parameters)).rows[0]
         if (!result.constraints_satisfied) {
             throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
@@ -147,7 +140,6 @@ router.all('/:table', async (req: NextApiRequest, res: NextApiResponse) => {
         'range-unit': 'items',
         'content-range': fmtContentRangeHeader(offsetInt, offsetInt + pageTotal - 1, totalResultSet),
         'content-type': 'application/json',
-        'x-parse-time': `${(parse_end - parse_start).toFixed(2)}ms`,
         'x-query-time': `${(query_end - query_start).toFixed(2)}ms`,
         'x-format-time': `${(format_end - format_start).toFixed(2)}ms`,
     }

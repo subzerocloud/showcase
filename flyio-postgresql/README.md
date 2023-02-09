@@ -21,11 +21,9 @@ See the live version at [northwind-postgresql.fly.dev](https://northwind-postgre
 - The backend runs in a single [serverless function](https://github.com/subzerocloud/showcase/blob/main/flyio-postgresql/pages/api/%5B...path%5D.ts). 
     Most of the code deals with the configuration of the backend, and 99% of the functionality is within these lines:
     ```typescript
-    // parse the HTTP Request object into an internal AST representation
-    let subzeroRequest = await subzero.parse(publicSchema, `${urlPrefix}/`, role, req)
     // .....
-    // generate the SQL query from the AST representation
-    const { query, parameters } = subzero.fmtMainQuery(subzeroRequest, queryEnv)
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     // .....
     // execute the query
     result = (await db.query(query, parameters)).rows[0]

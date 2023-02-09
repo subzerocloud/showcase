@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=app
+
+    volumes:
+      - "./northwindtraders-postgres.sql:/docker-entrypoint-initdb.d/northwindtraders-postgres.sql"
