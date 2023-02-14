@@ -3,8 +3,8 @@ import "https://deno.land/x/dotenv@v3.2.0/load.ts";
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.159.0/http/file_server.ts";
 import { Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
-// @deno-types="../node_modules/subzerocloud/dist/index.d.ts"
-import { Subzero, SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '../node_modules/subzerocloud/dist/index.js'
+// @deno-types="../node_modules/@subzerocloud/nodejs/index.d.ts"
+import Subzero, {SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '../node_modules/@subzerocloud/nodejs/index.js'
 // @deno-types="../node_modules/itty-router/dist/itty-router.d.ts"
 import { Router } from '../node_modules/itty-router/dist/itty-router.min.mjs'
 import permissions from '../permissions.js'
@@ -60,6 +60,7 @@ async function initSubzero() {
     const schema = JSON.parse(result.rows[0].json_schema)
     //console.log('schema', schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
+    await subzero.init()
 }
 
 // setup the router that is used to route the requests to the correct handler

@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --debug",
     "start": "next start",
     "seed": "DB_PATH=.; mkdir -p $DB_PATH && sqlite3 $DB_PATH/db.sqlite < northwindtraders-sqlite.sql > /dev/null"
   },
   "dependencies": {
+    "@subzerocloud/nodejs": "^0.1.9",
     "itty-router": "^2.6.6",
     "next": "12.3.1",
     "react": "18.2.0",
@@ -16,7 +17,6 @@
     "react-markdown": "^8.0.3",
     "sqlite": "^4.1.2",
     "sqlite3": "^5.1.2",
-    "subzerocloud": "^0.1.5",
     "swr": "^1.3.0",
     "yargs": "^17.6.0"
   },

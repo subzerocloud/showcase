@@ -2077,10 +2077,10 @@ styled-jsx@5.0.7:
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-5.0.7.tgz#be44afc53771b983769ac654d355ca8d019dff48"
   integrity sha512-b3sUzamS086YLRuvnaDigdAewz1/EFYlHpYBP5mZovKEdQQOIIYq8lApylub3HHZ6xFjV051kkGU7cudJmrXEA==
 
-subzerocloud@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/subzerocloud/-/subzerocloud-0.1.5.tgz#a224a173280299b54e8841b6026640212f428d8f"
-  integrity sha512-4OExieqk7dpAO88/QJhn+evpy9kc9MJvm0G87Kcd0uzCzemgY+DvaUfGa1OnVVZpTLnKEQe3ma1NQJH1JrxNjQ==
+subzerocloud@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/subzerocloud/-/subzerocloud-0.1.6.tgz#65070035d355e634473fa68bfee228daf1f54af5"
+  integrity sha512-+u6Bv5zqK+sec0/ealHo3RGfZYI27J8vvYjsoYvgms4if6SjkLJyXpw+AAp8eRrwIIZDns4WPJ+DaxMIc9bG8Q==
 
 supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"

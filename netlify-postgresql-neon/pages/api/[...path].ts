@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 import { Pool } from 'pg'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from 'subzerocloud'
+import Subzero, {SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '@subzerocloud/nodejs'
 import { Router } from 'itty-router'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
@@ -59,6 +59,7 @@ async function initSubzero() {
     const schema = JSON.parse(result.rows[0].json_schema)
     //console.log('schema', schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
+    await subzero.init()
 }
 
 // setup the router that is used to route the requests to the correct handler

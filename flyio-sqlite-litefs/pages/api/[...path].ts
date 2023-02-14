@@ -2,7 +2,7 @@
 import * as sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
+import Subzero, { SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/nodejs'
 import { existsSync, readFileSync } from 'fs'
 import { dirname } from 'path';
 import yargs from 'yargs'
@@ -89,6 +89,7 @@ async function init_subzero() {
     // to make the function startup faster, one can cache the schema object in a KV store
     const schema = JSON.parse(result.json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
+    await subzero.init()
 }
 
 // setup the router that is used to route the requests to the correct handler

@@ -28,9 +28,10 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
     const { query, parameters } = await subzero.fmtStatement(publicSchema, `${urlPrefix}/`, role, req, queryEnv)
     // .....
     // prepare the statement
-    const statement = env.DB.prepare(query).bind(...parameters)
-    // execute the query
-    const result = await statement.first()
+    result = (await db.query(query, parameters)).rows[0]
+
+    const body = result.body // this is a json string
+    return new Response(body, { ... })
     ```
 
 ## Running locally
@@ -51,6 +52,7 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
     cp .dev.vars.example .dev.vars
     ```
 - Run in dev mode
+  Note: this currently is not working due to missing wasm support in `wrangler pages` (though it works fine with `wrangler dev`)
     ```bash
     yarn dev
     ```

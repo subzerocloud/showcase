@@ -1,5 +1,5 @@
 // this is a catch-all function that is called for every request to the api
-import { Pool } from '@neondatabase/serverless'
+import { Client } from '@neondatabase/serverless'
 import { Router } from 'itty-router'
 import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
 import permissions from '../../permissions.js'
@@ -8,7 +8,6 @@ import custom_relations from '../../relations.js'
 const urlPrefix = '/api'
 const publicSchema = 'public'
 const dbType = 'postgresql'
-let dbPool
 
 // allowed select functions can be defined here
 // they can be used in the select parameter
@@ -29,14 +28,6 @@ function log_query(query: string, parameters: any[]) {
 // this function initializes the subzero instance that is responsible for parsing and formatting the queries
 let subzero: Subzero
 async function init_subzero(env) {
-    console.log('initSubzero')
-    dbPool = new Pool({
-        connectionString: env.DATABASE_URL,
-        max: 20,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 10000,
-    })
-    
     const { query , parameters } = getIntrospectionQuery(
         dbType, // database type
         publicSchema, // the schema name that is exposed to the HTTP api (ex: public, api)
@@ -46,16 +37,16 @@ async function init_subzero(env) {
             ['permissions.json', permissions],
         ])
     )
-    //console.log(query, parameters)
-    const db = await dbPool.connect()
+    const db = new Client(env.DATABASE_URL)
+    await db.connect()
     const result = await db.query(query, parameters)
-    db.release()
 
     // the result of the introspection query is a json string representation of the database schema/structure
     // this schema object is used to generate the queries and check the permissions
     // to make the function startup faster, one can cache the schema object in a KV store
     const schema = JSON.parse(result.rows[0].json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
+    await subzero.init()
 }
 
 // we use the itty-router library to define sparate route handlers
@@ -85,10 +76,11 @@ router.get('/stats', async () => {
 
 // This route will expose a PostgREST compatible api to the underlying D1 database
 // This is where the magic happens
-router.all('/:table', async (req:Request, { env }) => {
+router.all('/:table', async (req:Request, env) => {
+    
     // the role that is currently making the request
     // usually this would come from the JWT token payload
-    // this role is used for the permissions check 
+    // this role is used for the permissions check
     const role = 'anonymous'
 
     const method = req.method
@@ -112,19 +104,11 @@ router.all('/:table', async (req:Request, { env }) => {
     log_query(query, parameters)
 
     let result
-    const db = await dbPool.connect()
+    const db = new Client(env.DATABASE_URL)
+    await db.connect()
     const query_start = Date.now()
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
-        // let [_b, q, _c] = await Promise.all([
-        //     db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`),
-        //     db.query(query, parameters),
-        //     db.query('COMMIT')
-        // ])
-        // result = q.rows[0]
-        // if (!result.constraints_satisfied) {
-        //     throw new SubzeroError('Permission denied', 403, 'check constraint of an insert/update permission has failed')
-        // }
         await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
         //await db.query(envQuery, envParameters)
         result = (await db.query(query, parameters)).rows[0]
@@ -135,9 +119,6 @@ router.all('/:table', async (req:Request, { env }) => {
     } catch (e) {
         await db.query('ROLLBACK')
         throw e
-    }
-    finally {
-        db.release()
     }
     const query_end = Date.now()
 
@@ -162,24 +143,20 @@ router.all('/:table', async (req:Request, { env }) => {
     })
 })
 
-// this is the entrypoint function of a Cloudflare worker
-export async function onRequest(context) {
-    // Contents of context object
-    const {
-        request, // same as existing Worker API
-        //env, // same as existing Worker API
-        //params, // if filename includes [id] or [[path]]
-        //waitUntil, // same as ctx.waitUntil in existing Worker API
-        //next, // used for middleware or to fetch assets
-        //data, // arbitrary space for passing data between middlewares
-    } = context
+// catch all route
+router.all('*', async (_, res) => {
+    res.writeHead(404, {
+        'content-type': 'application/json',
+    }).end(JSON.stringify({ message: 'Not Found' }))
+    return res
+})
 
+async function handleRequest(request, env, context) {
     // handle errors thrown by the route handlers
     try {
-        return await router.handle(request, context)
+        return await router.handle(request, env)
     } catch (e) {
         if (e instanceof SubzeroError) {
-            console.log('SubzeroError:', e)
             return new Response(e.toJSONString(), {
                 status: e.statusCode(),
                 headers: {
@@ -188,7 +165,6 @@ export async function onRequest(context) {
             })
         }
         else {
-            console.log('Error:', e)
             return new Response(JSON.stringify({ message: e.toString() }), {
                 status: 500,
                 headers: {
@@ -198,3 +174,25 @@ export async function onRequest(context) {
         }
     }
 }
+
+// this is the entrypoint function of a Cloudflare Pages function
+export async function onRequest(context) {
+    // Contents of context object
+    const {
+        request, // same as existing Worker API
+        env, // same as existing Worker API
+        //params, // if filename includes [id] or [[path]]
+        //waitUntil, // same as ctx.waitUntil in existing Worker API
+        //next, // used for middleware or to fetch assets
+        //data, // arbitrary space for passing data between middlewares
+    } = context
+
+    await handleRequest(request, env, context)
+}
+
+// this is the entrypoint function of a Cloudflare Worker
+export default {
+    async fetch(request, env, context) {
+        return await handleRequest(request, env, context)
+    },
+};

@@ -1,10 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "yarn db & yarn start && kill $!",
+    "dev": "yarn build & yarn db & yarn start && kill $!",
     "build": "tsc",
-    "watch": "tsc -w",
-    "start": "tsc -w & nodemon -r dotenv/config -q -w dist dist/server.js",
+    "watch": "tsc -w & yarn start",
+    "start": "nodemon -r dotenv/config -q -w dist dist/server.js",
     "db": "docker-compose run --rm --service-ports db &> /dev/null"
   },
   "devDependencies": {
@@ -23,7 +23,6 @@
     "jsonpath": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "pg": "^8.8.0",
-    "subzerocloud": "^0.1.5"
+    "pg": "^8.8.0"
   }
 }

@@ -6,12 +6,11 @@
     "dev": "yarn dev_db & next dev & yarn deno_run && kill $!",
     "dev_db": "docker-compose run --rm --service-ports db  &> /dev/null",
     "deno_run": "deno run --allow-env --allow-net --allow-read=.env,.env.defaults,out  deno/server.ts",
-    "dev_deno": "yarn dev_db & yarn deno_run && kill $!",
     "build": "next build && next export"
   },
   "dependencies": {
-    "itty-router": "^2.6.6",
-    "subzerocloud": "^0.1.5"
+    "@subzerocloud/nodejs": "^0.1.9",
+    "itty-router": "^2.6.6"
   },
   "devDependencies": {
     "@headlessui/react": "^1.7.3",

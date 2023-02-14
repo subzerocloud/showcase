@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 import { Pool } from 'pg'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from 'subzerocloud'
+import Subzero, { SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '@subzerocloud/nodejs'
 import { Router } from 'itty-router'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'

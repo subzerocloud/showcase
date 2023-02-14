@@ -47,6 +47,7 @@ async function init_subzero(env) {
     // to make the function startup faster, one can cache the schema object in a KV store
     const schema = JSON.parse(result.json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
+    await subzero.init()
 }
 
 // we use the itty-router library to define sparate route handlers

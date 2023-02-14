@@ -1,7 +1,8 @@
 import {createServer, IncomingMessage, ServerResponse} from 'http'
 import pg from 'pg'
-const {Pool} = pg
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, fmtPostgreSqlEnv, statusFromPgErrorCode } from 'subzerocloud'
+const { Pool } = pg
+import Subzero, {SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader, fmtPostgreSqlEnv, statusFromPgErrorCode } from '@subzerocloud/nodejs'
+
 import { Router } from 'itty-router'
 import jsonwebtoken from 'jsonwebtoken'
 const { verify } = jsonwebtoken;
