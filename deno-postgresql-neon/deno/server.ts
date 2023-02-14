@@ -3,8 +3,8 @@ import "https://deno.land/x/dotenv@v3.2.0/load.ts";
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.159.0/http/file_server.ts";
 import { Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
-// @deno-types="../node_modules/@subzerocloud/nodejs/index.d.ts"
-import Subzero, {SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '../node_modules/@subzerocloud/nodejs/index.js'
+// @deno-types="../node_modules/@subzerocloud/deno/index.d.ts"
+import Subzero, {SubzeroError, getIntrospectionQuery, Env, fmtContentRangeHeader, /*fmtPostgreSqlEnv*/ } from '../node_modules/@subzerocloud/deno/index.js'
 // @deno-types="../node_modules/itty-router/dist/itty-router.d.ts"
 import { Router } from '../node_modules/itty-router/dist/itty-router.min.mjs'
 import permissions from '../permissions.js'
@@ -86,7 +86,7 @@ router.get('/stats', () => {
 // This function will expose a PostgREST compatible api to the underlying database
 // This is where the magic happens
 router.all('/:table', async (req: Request) => {
-    let parse_start = 0, parse_end = 0, query_start = 0, query_end = 0, format_start = 0, format_end = 0; // used for performance measurements
+    let query_start = 0, query_end = 0, format_start = 0, format_end = 0; // used for performance measurements
     const url = new URL(req.url)
     const offset = url.searchParams.get('offset')
     const method = req.method || 'GET'
