@@ -452,6 +452,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@subzerocloud/web@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/web/-/web-0.1.9.tgz#be456eebe24cbd2dbccb2d37815d4f5934637a3d"
+  integrity sha512-3OxJFQMmbYzYHc+05Csw+gUvtrRIkMSu9TWVktMagw2RlCrluhuZNPI8mjLsN1oaeCf+EokAxkjW2jY4emOu5g==
+
 "@swc/helpers@0.4.11":
   version "0.4.11"
   resolved "https://registry.npmjs.org/@swc/helpers/-/helpers-0.4.11.tgz"
@@ -2186,11 +2191,6 @@ styled-jsx@5.0.7:
   resolved "https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.0.7.tgz"
   integrity sha512-b3sUzamS086YLRuvnaDigdAewz1/EFYlHpYBP5mZovKEdQQOIIYq8lApylub3HHZ6xFjV051kkGU7cudJmrXEA==
 
-subzerocloud@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/subzerocloud/-/subzerocloud-0.1.6.tgz#65070035d355e634473fa68bfee228daf1f54af5"
-  integrity sha512-+u6Bv5zqK+sec0/ealHo3RGfZYI27J8vvYjsoYvgms4if6SjkLJyXpw+AAp8eRrwIIZDns4WPJ+DaxMIc9bG8Q==
-
 supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
@@ -2444,6 +2444,28 @@ wrangler@^2.9.1:
   version "2.9.1"
   resolved "https://registry.npmjs.org/wrangler/-/wrangler-2.9.1.tgz"
   integrity sha512-tD0DJnUXQe5rd9XyVT4fd7o3N0HGGv70Uz9wAdVUl+R109sOBGfitLUxEx9z7tXOxaigR1X5R/o80yVDBlNr6A==
+  dependencies:
+    "@cloudflare/kv-asset-handler" "^0.2.0"
+    "@esbuild-plugins/node-globals-polyfill" "^0.1.1"
+    "@esbuild-plugins/node-modules-polyfill" "^0.1.4"
+    "@miniflare/core" "2.11.0"
+    "@miniflare/d1" "2.11.0"
+    "@miniflare/durable-objects" "2.11.0"
+    blake3-wasm "^2.1.5"
+    chokidar "^3.5.3"
+    esbuild "0.16.3"
+    miniflare "2.11.0"
+    nanoid "^3.3.3"
+    path-to-regexp "^6.2.0"
+    selfsigned "^2.0.1"
+    source-map "^0.7.4"
+    xxhash-wasm "^1.0.1"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+"wrangler@https://prerelease-registry.devprod.cloudflare.dev/prs/2685/npm-package-wrangler-2685":
+  version "0.0.0-93baae0d"
+  resolved "https://prerelease-registry.devprod.cloudflare.dev/prs/2685/npm-package-wrangler-2685#ad9caf63b6623209cacd6dc653bebc89351684ab"
   dependencies:
     "@cloudflare/kv-asset-handler" "^0.2.0"
     "@esbuild-plugins/node-globals-polyfill" "^0.1.1"

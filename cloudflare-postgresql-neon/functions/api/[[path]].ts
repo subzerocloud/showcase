@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 import { Client } from '@neondatabase/serverless'
 import { Router } from 'itty-router'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
+import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/web'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
 
@@ -187,7 +187,7 @@ export async function onRequest(context) {
         //data, // arbitrary space for passing data between middlewares
     } = context
 
-    await handleRequest(request, env, context)
+    return await handleRequest(request, env, context)
 }
 
 // this is the entrypoint function of a Cloudflare Worker

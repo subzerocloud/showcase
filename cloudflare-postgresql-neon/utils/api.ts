@@ -1,4 +1,13 @@
-import { parseRangeHeader } from 'subzerocloud'
+//import { parseRangeHeader } from 'subzerocloud'
+function parseRangeHeader(headerValue: string): { first: number; last: number, total: number } {
+    const parts = headerValue.split('/')
+    const total = parseInt(parts[1], 10) ||  0
+    const range = parts[0].split('-')
+    const first = parseInt(range[0], 10) || 0
+    const last = parseInt(range[1], 10) || 0
+    return { first, last, total }
+}
+
 import useSWR from 'swr'
 interface FetcherResult {
     status: number
