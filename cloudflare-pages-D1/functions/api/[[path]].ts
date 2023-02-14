@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 
 import { Router } from 'itty-router'
-import { Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from 'subzerocloud'
+import {Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/web'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
 
@@ -77,7 +77,7 @@ router.get('/stats', async () => {
 
 // This route will expose a PostgREST compatible api to the underlying D1 database
 // This is where the magic happens
-router.all('/:table', async (req:Request, { env }) => {
+router.all('/:table', async (req:Request, env) => {
     // the role that is currently making the request
     // usually this would come from the JWT token payload
     // this role is used for the permissions check 
@@ -132,24 +132,13 @@ router.all('/:table', async (req:Request, { env }) => {
     })
 })
 
-// this is the entrypoint function of a Cloudflare worker
-export async function onRequest(context) {
-    // Contents of context object
-    const {
-        request, // same as existing Worker API
-        //env, // same as existing Worker API
-        //params, // if filename includes [id] or [[path]]
-        //waitUntil, // same as ctx.waitUntil in existing Worker API
-        //next, // used for middleware or to fetch assets
-        //data, // arbitrary space for passing data between middlewares
-    } = context
-
+async function handleRequest(request, env, context) {
     // handle errors thrown by the route handlers
     try {
-        return await router.handle(request, context)
+        return await router.handle(request, env)
     } catch (e) {
+        //console.error(e)
         if (e instanceof SubzeroError) {
-            console.log('SubzeroError:', e)
             return new Response(e.toJSONString(), {
                 status: e.statusCode(),
                 headers: {
@@ -158,7 +147,6 @@ export async function onRequest(context) {
             })
         }
         else {
-            console.log('Error:', e)
             return new Response(JSON.stringify({ message: e.toString() }), {
                 status: 500,
                 headers: {
@@ -168,3 +156,25 @@ export async function onRequest(context) {
         }
     }
 }
+
+// this is the entrypoint function of a Cloudflare Pages function
+export async function onRequest(context) {
+    // Contents of context object
+    const {
+        request, // same as existing Worker API
+        env, // same as existing Worker API
+        //params, // if filename includes [id] or [[path]]
+        //waitUntil, // same as ctx.waitUntil in existing Worker API
+        //next, // used for middleware or to fetch assets
+        //data, // arbitrary space for passing data between middlewares
+    } = context
+
+    return await handleRequest(request, env, context)
+}
+
+// this is the entrypoint function of a Cloudflare Worker
+export default {
+    async fetch(request, env, context) {
+        return await handleRequest(request, env, context)
+    },
+};

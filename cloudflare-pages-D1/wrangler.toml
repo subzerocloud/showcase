@@ -5,7 +5,8 @@ compatibility_date = "2023-02-08"
 
 [[ d1_databases ]]
 binding = "DB"
-database_name = "db"
-database_id = ""
+database_name = "d1-northwind"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
 
 
