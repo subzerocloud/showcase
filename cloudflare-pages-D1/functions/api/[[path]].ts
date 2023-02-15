@@ -1,7 +1,7 @@
 // this is a catch-all function that is called for every request to the api
 
 import { Router } from 'itty-router'
-import {Subzero, SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/web'
+import Subzero, { SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/web'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
 
@@ -47,7 +47,6 @@ async function init_subzero(env) {
     // to make the function startup faster, one can cache the schema object in a KV store
     const schema = JSON.parse(result.json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
-    await subzero.init()
 }
 
 // we use the itty-router library to define sparate route handlers

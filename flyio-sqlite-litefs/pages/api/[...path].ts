@@ -89,7 +89,6 @@ async function init_subzero() {
     // to make the function startup faster, one can cache the schema object in a KV store
     const schema = JSON.parse(result.json_schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
-    await subzero.init()
 }
 
 // setup the router that is used to route the requests to the correct handler

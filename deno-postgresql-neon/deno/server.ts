@@ -60,7 +60,6 @@ async function initSubzero() {
     const schema = JSON.parse(result.rows[0].json_schema)
     //console.log('schema', schema)
     subzero = new Subzero(dbType, schema, allowed_select_functions)
-    await subzero.init()
 }
 
 // setup the router that is used to route the requests to the correct handler
