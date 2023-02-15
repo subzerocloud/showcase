@@ -1,6 +1,6 @@
 # Northwind Traders (by subZero)
 ## Running on Fly.io + SQLite (LiteFS)
-This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
+This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/nodejs) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
 See the live version at [northwind-sqlite.fly.dev](https://northwind-sqlite.fly.dev) and [source code](https://github.com/subzerocloud/showcase/tree/main/flyio-sqlite-litefs) on GitHub.
 
@@ -12,6 +12,7 @@ See the live version at [northwind-sqlite.fly.dev](https://northwind-sqlite.fly.
     - SQLite (including Cloudflare D1)
     - PostgreSQL (including YugabyteDB, CockroachDB, TimescaleDB, etc)
     - ClickHouse
+    - MySQL backend (PlanetScaleDB upcoming)
 - Supports advanced analitycal queries (window functions, aggregates, etc)
 
 ## Example details

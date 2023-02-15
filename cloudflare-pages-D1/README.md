@@ -1,6 +1,6 @@
 # Northwind Traders (by subZero)
 ## Running on Cloudflare&apos;s Pages + D1
-This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
+This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/web) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
 See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-pages-D1) on GitHub.
 

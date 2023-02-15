@@ -1,6 +1,6 @@
 # Northwind Traders (by subZero)
 ## Running on Cloudflare&apos;s Pages + PostgreSQL (Neon)
-This is a demo of [subZero library](https://www.npmjs.com/package/subzerocloud) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
+This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/web) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
 See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-postgresql-neon) on GitHub.
 
@@ -14,6 +14,7 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
     - SQLite (including Cloudflare D1)
     - PostgreSQL (including YugabyteDB, CockroachDB, TimescaleDB, etc)
     - ClickHouse
+    - MySQL backend (PlanetScaleDB upcoming)
 - Supports advanced analitycal queries (window functions, aggregates, etc)
 
 ## Example details

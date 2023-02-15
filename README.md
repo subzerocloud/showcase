@@ -1,6 +1,6 @@
 ## What is this?
 
-**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/subzerocloud) that allows you to expose a PostgREST compatible backend on top of any database. It's functionality can also be used through the [Docker image](https://hub.docker.com/r/subzerocloud/subzero) that is a drop-in replacement for PostgREST.
+**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows you to expose a PostgREST compatible backend on top of any database. It's functionality can also be used through the [Docker image](https://hub.docker.com/r/subzerocloud/subzero) that is a drop-in replacement for PostgREST.
 
 This repository is a showcases the functionality and versatility of the new Rust codebase.
 
