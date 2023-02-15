@@ -105,10 +105,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@subzerocloud/deno@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@subzerocloud/deno/-/deno-0.1.9.tgz#39785cad1718d81150dbe6c0423772c657ed9729"
-  integrity sha512-9U1nDhVqrHQpEzOJF2d0aCylWztsb3+7HQurMi7vpG0HsKjTPGsKgzjamgFxFyiC9GBtYqeshpUEh3R9m5TdOQ==
+"@subzerocloud/deno@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/deno/-/deno-0.1.10.tgz#de302745573dce400c35c2a35bfbbda237650a2e"
+  integrity sha512-qptu5rHb4IG5maAapFSucESLT8qQi+6dN49563SHKPy1vROdwLjwExSS4c3fSN/9BaM/B09ky188IR6ma9PblA==
 
 "@swc/helpers@0.4.11":
   version "0.4.11"

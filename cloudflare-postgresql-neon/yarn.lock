@@ -452,10 +452,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@subzerocloud/web@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@subzerocloud/web/-/web-0.1.9.tgz#be456eebe24cbd2dbccb2d37815d4f5934637a3d"
-  integrity sha512-3OxJFQMmbYzYHc+05Csw+gUvtrRIkMSu9TWVktMagw2RlCrluhuZNPI8mjLsN1oaeCf+EokAxkjW2jY4emOu5g==
+"@subzerocloud/web@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/web/-/web-0.1.10.tgz#c9e37d7062d47a306cfb9f4b297b93c3fb89b701"
+  integrity sha512-xS9lZ00rSOVrjvafYcAVjTmiP5xPSAKwO1+CMfHrq93UdWEE5/JVnOCEZfzJNNQ4aWLyB7Oy+sDgn6RV6ckWlw==
 
 "@swc/helpers@0.4.11":
   version "0.4.11"

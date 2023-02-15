@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@subzerocloud/nodejs@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/nodejs/-/nodejs-0.1.10.tgz#449e09da35e03ce341e7e40dd98a9792e7911e89"
+  integrity sha512-+9UDQpN3dVhKpa9rO+cXvo/m8XsHP17jxqzyk1yMsi1B+oHcV5ViIf+HHZhKLRoWXqUtwMyjf1iuSEH3slCs+w==
+
 "@types/finalhandler@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@types/finalhandler/-/finalhandler-1.2.0.tgz"
