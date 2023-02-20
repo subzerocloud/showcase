@@ -107,7 +107,7 @@ router.all('/:table', async (req: Request) => {
         ['role', role],
         ['request.method', method],
         ['request.headers', JSON.stringify(req.headers)],
-        ['request.get', JSON.stringify(url.searchParams)],
+        ['request.get', JSON.stringify(Object.fromEntries(url.searchParams))],
         ['request.jwt.claims', JSON.stringify({ role })],
     ]
 

@@ -196,7 +196,7 @@ router.all(`${apiPrefix}/:url_schema?/:table`, async (req: IncomingMessage & { u
         ['search_path', dbExtraSearchPath],
         ['request.method', method],
         ['request.headers', JSON.stringify(req.headers)],
-        ['request.get', JSON.stringify(url.searchParams)],
+        ['request.get', JSON.stringify(Object.fromEntries(url.searchParams))],
         ['request.jwt.claims', JSON.stringify(context.jwt_claims || {})],
     ]
 
