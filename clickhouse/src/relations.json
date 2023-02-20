@@ -1,0 +1,20 @@
+[
+    {
+        "constraint_name": "pickup_fkey",
+        "table_schema": "default",
+        "table_name": "trips",
+        "columns": ["pickup_nyct2010_gid"],
+        "foreign_table_schema": "default",
+        "foreign_table_name": "taxi_zone_dictionary",
+        "foreign_columns": ["LocationID"]
+    },
+    {
+        "constraint_name": "dropoff_fkey",
+        "table_schema": "default",
+        "table_name": "trips",
+        "columns": ["dropoff_nyct2010_gid"],
+        "foreign_table_schema": "default",
+        "foreign_table_name": "taxi_zone_dictionary",
+        "foreign_columns": ["LocationID"]
+    }
+]

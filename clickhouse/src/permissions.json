@@ -1,0 +1,11 @@
+[
+    { "table_schema": "default", "table_name": "taxi_zone_dictionary", "role": "public", "grant": ["select"], "using": [{"sql":"true"}] },
+    { 
+        "table_schema": "default", 
+        "table_name": "trips", 
+        "role": "public", 
+        "grant": ["select"],
+        "policy_for": ["select"],
+        "using": [{"sql":"true"}]
+    }
+]

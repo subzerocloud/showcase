@@ -1,0 +1,15 @@
+version: '2'
+services:
+  db:
+    container_name: db
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+      - CLICKHOUSE_DB=${CLICKHOUSE_DB}
+      - CLICKHOUSE_WATCHDOG_ENABLE=0
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d"
