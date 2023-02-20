@@ -12,7 +12,7 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/deno-po
     - SQLite (including Cloudflare D1)
     - PostgreSQL (including YugabyteDB, CockroachDB, TimescaleDB, etc)
     - ClickHouse
-    - MySQL backend (PlanetScaleDB upcoming)
+    - MySQL (PlanetScaleDB upcoming)
 - Supports advanced analitycal queries (window functions, aggregates, etc)
 
 ## Example details

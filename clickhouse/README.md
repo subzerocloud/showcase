@@ -1,5 +1,5 @@
 ## What is this?
-This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/web) capabilities, leveraged in a Js/Typescript app, to automatically expose a PostgREST compatible backend on top of the underlying [ClickHouse](https://clickhouse.com/) database. 
+This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/web) capabilities, leveraged in a Js/Typescript server, to automatically expose a PostgREST compatible backend on top of the underlying [ClickHouse](https://clickhouse.com/) database. 
 
 ## Try it out
 - Clone the repo
