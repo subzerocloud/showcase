@@ -9,7 +9,7 @@
     "build": "next build && next export"
   },
   "dependencies": {
-    "@subzerocloud/deno": "^0.1.10",
+    "@subzerocloud/deno": "^0.1.11",
     "itty-router": "^2.6.6"
   },
   "devDependencies": {
