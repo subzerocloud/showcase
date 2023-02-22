@@ -46,6 +46,7 @@ This repository is a showcases the functionality and versatility of the new code
 - [x] REST api (PostgREST compatible)
 - [x] Production ready code
 - [x] Stable library interface
+- [ ] PostgreSQL extension (expose an HTTP endpoint from within the database)
 - [ ] GraphQL api (Hasura compatible)
 
 
