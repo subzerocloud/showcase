@@ -9,6 +9,9 @@ This repository is a showcases the functionality and versatility of the new code
 
 - [clickhouse](clickhouse) - A Typescript server that automatically expose a PostgREST compatible API on top of the underlying [ClickHouse](https://clickhouse.com/) database with build in Authorization capabilities. The example is based on the [ClickHouse tutorial](https://clickhouse.com/docs/en/tutorial/) and shows how to use the REST API to execute complex analytical queries.
 
+- [node-myrest](node-myrest) - This is a TypeScript server that provides a PostgREST compatible REST API for a MySQL database.
+
+
 - Demos of subZero library capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. Note that the frontend code (nextjs app) is almost exactly the same for all the examples but we are able to use different underlying databases and deploy the app on different platforms. Most of the code in the examples are for the frontend part and the entire backend is just a few lines of code in a single file that you can extend to your liking.
 
     - [cloudflare-pages-d1](cloudflare-pages-D1) - A example of a cloudflare pages deployment with data stored in D1 (Cloudflare's SQLite compatible edge databse).
@@ -43,7 +46,7 @@ This repository is a showcases the functionality and versatility of the new code
 - [x] REST api (PostgREST compatible)
 - [x] Production ready code
 - [x] Stable library interface
-- [ ] GraphQL api
+- [ ] GraphQL api (Hasura compatible)
 
 
 
