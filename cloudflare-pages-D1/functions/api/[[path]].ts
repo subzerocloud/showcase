@@ -76,14 +76,14 @@ router.get('/stats', async () => {
 
 // This route will expose a PostgREST compatible api to the underlying D1 database
 // This is where the magic happens
-router.all('/:table', async (req:Request, env) => {
+router.all('/:table', async (req: Request, env) => {
     // the role that is currently making the request
     // usually this would come from the JWT token payload
     // this role is used for the permissions check 
     const role = 'anonymous'
 
     const method = req.method
-    if (! ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+    if (!['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
         throw new SubzeroError(`Method ${method} not allowed`, 400)
     }
 
