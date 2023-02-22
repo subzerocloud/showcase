@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.2.4",
-    "@subzerocloud/web": "^0.1.11",
+    "@subzerocloud/web": "^0.1.13",
     "itty-router": "^2.6.6",
     "next": "12.3.1",
     "react": "18.2.0",
@@ -34,6 +34,6 @@
     "raw-loader": "^4.0.2",
     "tailwindcss": "^3.1.8",
     "typescript": "4.8.4",
-    "wrangler": "https://prerelease-registry.devprod.cloudflare.dev/prs/2685/npm-package-wrangler-2685"
+    "wrangler": "^2.10.0"
   }
 }
