@@ -27,7 +27,7 @@ It uses **subZero** TypeScript [bindings](https://www.npmjs.com/package/@subzero
     ```
 - Start the server 
     
-    You can also use `yarn watch` to start the server in watch mode and automatically rebuild on changes to the code in `src`)
+    You can also use `yarn watch` to start the server in watch mode and automatically rebuild on changes to the code in `src`
     ```bash
     yarn start
     ```
