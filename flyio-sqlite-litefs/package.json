@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --debug",
+    "build": "next build",
     "start": "next start",
     "seed": "DB_PATH=.; mkdir -p $DB_PATH && sqlite3 $DB_PATH/db.sqlite < northwindtraders-sqlite.sql > /dev/null"
   },
