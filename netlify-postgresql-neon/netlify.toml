@@ -1,5 +1,2 @@
 [build]
     command = "yarn build"
-
-[functions]
-    included_files = ["node_modules/@subzerocloud/nodejs/*.wasm"]
