@@ -60,33 +60,34 @@ See the live version at [northwind-postgresql.fly.dev](https://northwind-postgre
     ```
 
 ## Deploying to Fly.io
-- Create the app on Fly.io
+
+1. Create the app on Fly.io without deploying (we don't have a database yet)
     ```bash
-    flyctl launch --no-deploy
+    fly launch --no-deploy
     ```
 
-- Create a new database
+2. Create a new database app (in fly, the database is just another app)
     ```bash
-    flyctl postgres create
+    fly postgres create
     ```
 
-- Attach the database to the app
+3. Attach the database to our app. Notice the `<app-name>` (our app) and `<db-app-name>` (the database app) parameters. Those are the names you chose when you created the apps on step 1 and 2. This step will create a new database in PostgreSQL (that is running in as the `<db-app-name>`) and the name of the database will be the same as the `<app-name>`.
     ```bash
-    flyctl postgres attach --app <app-name> <postgres-app-name>
+    fly postgres attach --app <app-name> <db-app-name>
     ```
-- Proxy the db so that we can access it locally
+4. We can not directly connect to the new database (firewall) so we need to use the prxy command from fly. Open another terminal and run the command.
     ```bash
-    flyctl proxy 5432 -a <postgres-app-name>
-    ```
-
-- Populate the database
-    ```bash
-    psql postgres://postgres@localhost:<app-name> -f northwindtraders-postgres.sql
+    fly proxy 5432 -a <db-app-name>
     ```
 
-- Deploy the app
+5. Return to the original terminal and run the command to populate the database. Notice the `<app-name>` part in the connection string. That is the name you chose when you created the app on step 1. When asked for the password, use the password that was generated on step 2. Takea break, this will take a while.
     ```bash
-    flyctl deploy
+    psql postgres://postgres@localhost/<app-name> -f northwindtraders-postgres.sql
+    ```
+
+6. No that we have our database ready, we can deploy the app
+    ```bash
+    fly deploy
     ```
 
 ## Credits
