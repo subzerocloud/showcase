@@ -28,7 +28,7 @@ export default function Layout({ general, backoffice, children }: DashboardLayou
               <div className='text-gray-300 text-xs pl-5 pt-5 uppercase'>General</div>
               <nav className="space-y-1 px-2 py-4">
                 {general.map((item) => (
-                  <Link href={item.href} key={item.name}>
+                  <Link legacyBehavior href={item.href} key={item.name}>
                     <a
                     onClick={() => setActiveMenuItem(item.href)}
                     className={classNames(
@@ -52,7 +52,7 @@ export default function Layout({ general, backoffice, children }: DashboardLayou
               <div className='text-gray-300 text-xs pl-5 pt-5 uppercase'>Backoffice</div>
               <nav className="flex-1 space-y-1 px-2 py-4">
                 {backoffice.map((item) => (
-                  <Link href={item.href} key={item.name}>
+                  <Link legacyBehavior href={item.href} key={item.name}>
                     <a
                     onClick={() => setActiveMenuItem(item.href)}
                     className={classNames(
