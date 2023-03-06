@@ -42,3 +42,7 @@ Currently this is an experimental feature.
     -d '{"name":"new client"}' \
     'http://localhost:3000/clients?select=id,name'
     ```
+
+### Things to do after this
+
+Try replacing the `db/schema.sql` with your own schema and data and enjoy an instant PostgREST like experience right from your database.
