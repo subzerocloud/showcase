@@ -11,6 +11,7 @@ This repository is a showcases the functionality and versatility of the new code
 
 - [node-myrest](node-myrest) - This is a TypeScript server that provides a PostgREST compatible REST API for a MySQL database.
 
+- [pg-extension](pg-extension) - This is an example of subZero packaged and running as a PostgreSQL extension. There are no othere services to manage besides your database, just install the extension rpm/deb/apk package and it's ready to go, you can access your PostgreSQL sever through PostgREST compatible API over HTTP.
 
 - Demos of subZero library capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. Note that the frontend code (nextjs app) is almost exactly the same for all the examples but we are able to use different underlying databases and deploy the app on different platforms. Most of the code in the examples are for the frontend part and the entire backend is just a few lines of code in a single file that you can extend to your liking.
 
@@ -46,7 +47,7 @@ This repository is a showcases the functionality and versatility of the new code
 - [x] REST api (PostgREST compatible)
 - [x] Production ready code
 - [x] Stable library interface
-- [ ] PostgreSQL extension (expose an HTTP endpoint from within the database)
+- [x] PostgreSQL extension (expose an HTTP endpoint from within the database, experimental)
 - [ ] GraphQL api (Hasura compatible)
 
 

@@ -1,0 +1,21 @@
+version: '2'
+services:
+
+  db:
+    container_name: db
+    image: postgres15-with-subzero
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+      - "3000:3000"
+    environment:
+      # the values are defined in the .env file
+      # env vars specific to postgres image used on first boot
+      - POSTGRES_USER=superuser
+      - POSTGRES_PASSWORD=superuserpass
+      - POSTGRES_DB=app
+
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d"
