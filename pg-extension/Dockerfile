@@ -4,6 +4,7 @@ ARG VERSION=0.0.0
 
 # install the extension
 COPY subzero_debian-bullseye_pg15-${VERSION}_aarch64.deb .
+COPY subzero_debian-bullseye_pg15-${VERSION}_x86_64.deb .
 COPY introspection_query.sql /introspection_query.sql
 RUN export ARCH=$(uname -m) && \
     apt-get install -y ./subzero_debian-bullseye_pg15-${VERSION}_$ARCH.deb
