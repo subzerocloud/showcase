@@ -50,7 +50,8 @@ This repository is a showcases the functionality and versatility of the new code
 - [x] PostgreSQL extension (expose an HTTP endpoint from within the database, experimental)
 - [ ] GraphQL api (Hasura compatible)
 
-
+## Support
+For any questions you can reach out to us on [Discord](https://discord.gg/haRDFncx).
 
 
 ## License
