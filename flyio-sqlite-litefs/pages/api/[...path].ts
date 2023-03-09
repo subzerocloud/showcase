@@ -2,6 +2,7 @@
 import * as sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import Cors from 'cors'
 import Subzero, { SubzeroError, getIntrospectionQuery, Env as QueryEnv, fmtContentRangeHeader } from '@subzerocloud/nodejs'
 import { existsSync, readFileSync } from 'fs'
 import { dirname } from 'path';
@@ -10,6 +11,29 @@ import { hideBin } from 'yargs/helpers'
 import { Router } from 'itty-router'
 import permissions from '../../permissions.js'
 import custom_relations from '../../relations.js'
+
+
+// Initializing the cors middleware
+// You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+const cors = Cors({
+    methods: ['GET'],
+})
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    fn: Function
+) {
+    return new Promise((resolve, reject) => {
+        fn(req, res, (result: any) => {
+            if (result instanceof Error) {
+                return reject(result)
+            }
+            return resolve(result)
+        })
+    })
+}
 
 const argv = yargs(hideBin(process.argv)).options({
     db: { type: 'string', default: 'db.sqlite' },
@@ -202,6 +226,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
+
+        // Run the middleware
+        await runMiddleware(req, res, cors)
+
         // this line is needed to make the itty-router work with NodeJS request objects
         if (req.url && req.url[0] === '/') req.url = `http://${req.headers.host}${req.url}`
         //@ts-ignore
