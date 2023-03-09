@@ -36,6 +36,9 @@ subzero.db_schema_structure = '{"sql_file":"/introspection_query.sql"}'
 # the secret used to verify the JWT tokens
 subzero.jwt_secret = 'reallyreallyreallyreallyverysafe'
 
+# CORS settings, allow access from any origin domain
+subzero.access_control_allow_origin = '*'
+
 EOF
 )
 echo "${CUSTOM_CONFIG}" >> /var/lib/postgresql/data/postgresql.conf
