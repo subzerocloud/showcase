@@ -9,6 +9,10 @@ Currently this is an experimental feature.
 - [db/northwindtraders-postgres.sql](db/northwindtraders-postgres.sql) - Creates the tables and data for the example
 - [introspection_query.sql](introspection_query.sql) - The introspection query used to figure out the schema structure. This can be customized or it's possible to have a pregenerated schema.json file instead.
 
+### Leverage the extension to import data into Excel
+
+[![Importing data into Excel 365 from a local PostgreSQL database](http://img.youtube.com/vi/XlqQUq3k5uw/0.jpg)](http://www.youtube.com/watch?v=XlqQUq3k5uw "Importing data into Excel 365 from a local PostgreSQL database")
+
 ### Try it out
 - Clone the repo
     ```bash
