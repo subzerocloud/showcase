@@ -6,7 +6,7 @@ Currently this is an experimental feature.
 - [Dockerfile](Dockerfile) - Builds the docker image that has the extension installed
 - [docker-compose.yml](docker-compose.yml) - Starts the database with the extension installed
 - [db/init.sh](db/init.sh) - Adds the configuration for the extension to postgresql.conf
-- [db/schema.sql](db/schema.sql) - Creates the schema and tables for the example
+- [db/northwindtraders-postgres.sql](db/northwindtraders-postgres.sql) - Creates the tables and data for the example
 - [introspection_query.sql](introspection_query.sql) - The introspection query used to figure out the schema structure. This can be customized or it's possible to have a pregenerated schema.json file instead.
 
 ### Try it out
@@ -28,21 +28,22 @@ Currently this is an experimental feature.
     ```
 - Try some PostgREST style requests
     
-    Get id,name,client and tasks for project with id 2
+
+    Get the supplier with id 2 and all the products it sells
     ```bash
-    curl -i 'http://localhost:3000/projects?select=id,name,client:clients(*),tasks(id,name,users(name))&id=eq.2'
+    curl -i 'http://localhost:3000/Suppliers?select=*,Products(ProductID,ProductName,Category:Categories(CategoryID,CategoryName))&SupplierID=eq.2'
     ```
 
-    Insert a new client and return the id and name
+    Insert a new product category
     ```bash
     curl -X POST \
     -H 'Prefer: return=representation' \
     -H 'Content-Type: application/json' \
     -H 'Accept: application/vnd.pgrst.object+json' \
-    -d '{"name":"new client"}' \
-    'http://localhost:3000/clients?select=id,name'
+    -d '{"CategoryID":9,"CategoryName":"new category"}' \
+    'http://localhost:3000/Categories?select=CategoryID'
     ```
 
 ### Things to do after this
 
-Try replacing the `db/schema.sql` with your own schema and data and enjoy an instant PostgREST like experience right from your database.
+Try replacing the `db/northwindtraders-postgres.sql` with your own schema and data and enjoy an instant PostgREST like experience right from your database.
