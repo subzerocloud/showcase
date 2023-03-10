@@ -172,10 +172,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz#8be36a1f66f3265389e90b5f9c9962146758f728"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
-"@subzerocloud/nodejs@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@subzerocloud/nodejs/-/nodejs-0.1.13.tgz#352e02eb5e9b38a085c416a76e998f9d3da196be"
-  integrity sha512-vVhDM4E9kTwZGE0/hkxpHyRlBREnosRis+ICqG9jyHEgXmyhQQUtVUZ3jwqXh/Nhjra8OuIWbzVniGtz2nWLXQ==
+"@subzerocloud/nodejs@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/nodejs/-/nodejs-0.1.15.tgz#f23e129e82a6cd28ffdfa1a8afe966d43cf98638"
+  integrity sha512-/DR8kFsoaF7mvO2/lBCDGZFAeWwOFiE2KEdULT9wGRl0WkE8rHOJXnGN+4LZX0KM6fj9NVrjekCBFn+Oxii70A==
 
 "@swc/helpers@0.4.14":
   version "0.4.14"

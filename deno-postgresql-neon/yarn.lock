@@ -136,10 +136,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz#8be36a1f66f3265389e90b5f9c9962146758f728"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
-"@subzerocloud/deno@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@subzerocloud/deno/-/deno-0.1.13.tgz#0806bede900b9b93504dd404b01b6e37d85edcc3"
-  integrity sha512-0Lcody1QPFMNeQf81s0doSOIZpCcUCoLQnKtlVLVm2/A0wtPCak0SD9LnHUb477TQ145JwxBAQXb3JoeuiuCgA==
+"@subzerocloud/deno@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/deno/-/deno-0.1.15.tgz#09be27248fee03186e1ca69c0e2ac764e28972ff"
+  integrity sha512-EsjwJe9yzm4QCxp/m9B2GQCFn+Qv65LCtygjcZBcvpad9Lh/YoNkKERmoNCMue29XS/D2YOZdbH6eEIbuaAlZw==
 
 "@swc/helpers@0.4.14":
   version "0.4.14"

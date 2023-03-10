@@ -441,10 +441,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz#8be36a1f66f3265389e90b5f9c9962146758f728"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
-"@subzerocloud/web@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@subzerocloud/web/-/web-0.1.13.tgz#fbdc899882973c9ce0c116fd1017854d02d1835e"
-  integrity sha512-dQU3mvL1hypJZs49DplPzlDXsZglXiDfa49j4DeE2sb1ZHfvK/K83gymeFK6ef0dMGb4NTJhb7y4QPhvHDfpng==
+"@subzerocloud/web@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@subzerocloud/web/-/web-0.1.15.tgz#c6fc7d775b8fafdcafd87c5e96da449bd0d35202"
+  integrity sha512-BA/3ckoK2+m3rGN8KkOtOeKxMbBAm14psc3eskYt7dBtaYJzFwiPgYr6xZ3+Xd/aLSZH2NCLe77jUoD8zaQkVg==
 
 "@swc/helpers@0.4.14":
   version "0.4.14"

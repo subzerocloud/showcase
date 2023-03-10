@@ -9,7 +9,7 @@
     "seed": "DB_PATH=.; mkdir -p $DB_PATH && sqlite3 $DB_PATH/db.sqlite < northwindtraders-sqlite.sql > /dev/null"
   },
   "dependencies": {
-    "@subzerocloud/nodejs": "^0.1.13",
+    "@subzerocloud/nodejs": "^0.1.15",
     "eslint-config-next": "^13.2.1",
     "itty-router": "^2.6.6",
     "next": "^13.2.1",

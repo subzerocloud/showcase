@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@subzerocloud/nodejs": "^0.1.13",
+    "@subzerocloud/nodejs": "^0.1.15",
     "eslint-config-next": "^13.2.1",
     "itty-router": "^2.6.6",
     "next": "^13.2.1",

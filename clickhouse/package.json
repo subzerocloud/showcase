@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@clickhouse/client": "^0.0.12",
-    "@subzerocloud/nodejs": "^0.1.13",
+    "@subzerocloud/nodejs": "^0.1.15",
     "finalhandler": "^1.2.0",
     "itty-router": "^2.6.6",
     "jsonpath": "^1.1.1",
