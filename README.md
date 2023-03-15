@@ -1,8 +1,10 @@
 ## What is this?
 
-**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows you to expose a PostgREST compatible backend on top of any database
+**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows developers to implement their own customizable backend APIs on top of any database. The resulting REST API is PostgREST compattible. Currently PostgreSQL, SQLite, MySQL and ClickHouse are supported as target databases.
 
 This repository is a showcases the functionality and versatility of the new codebase.
+
+Since the core library is written in Rust, it's possible to leverage the capabilities in other settings besides JavaScript runtimes (see [pg-extension](pg-extension) example)
 
 ## Explore examples
 - [node-postgrest](node-postgrest) - This is a TypeScript implementation that can be used as an (extensible) drop-in replacement for PostgREST. Use it as a starting point and extend with custom routes and business logic.
@@ -49,6 +51,147 @@ This repository is a showcases the functionality and versatility of the new code
 - [x] Stable library interface
 - [x] PostgreSQL extension (expose an HTTP endpoint from within the database, experimental)
 - [ ] GraphQL api (Hasura compatible)
+
+## How to use
+
+The folowing example is meant as a guide, we recommend picking one of the examples in the [examples](examples) folder and modifying it to your needs.
+
+First decide the target platform where you want to deploy your code. JavaScript runtimes have slight differences so we provide different packages for each platform.
+
+```javascript
+import Subzero, { getIntrospectionQuery, Env } from '@subzerocloud/nodejs'
+
+// other packages are
+// @subzerocloud/deno
+// @subzerocloud/web // mostly for cloudflare workers or edge environments
+```
+
+Upon initialization, subzero requires the database schema shape (which is basically a big json that can come from anywhere), that determines the structure, and in some cases permissions, of the exposed REST api. While it's possible to manually fill in the schema object, it's much easier to just intrtospect the database.
+
+This code would be executed in an initialization function on server startup.
+
+```javascript
+const { query, parameters} = getIntrospectionQuery(
+    
+    // database type
+    'postgresql',
+    
+    // the schema name that is exposed to the HTTP api (ex: public, api)
+    'public',
+    
+    // the introspection queries have two 'placeholders' that allow you to specify
+    // internal permissions and also custom foreign key relations between database entities
+    new Map([
+        // ['relations.json', custom_relations],
+        // ['permissions.json', permissions],
+    ])
+)
+
+// use your database client to execute the query and get the schema
+// the following rows are slightly different depending on the database client library
+const result = await db.query(query, parameters)
+const schema = JSON.parse(result.rows[0].json_schema)
+```
+
+We can now initialize the global subzero instance that will parse the HTTP requests and generate the database queries for us.
+
+```javascript
+const subzero = new Subzero(
+    // the database type
+    'postgresql',
+    
+    // the schema object we got from the introspection query
+    schema
+)
+```
+
+
+Now we are ready to define our HTTP request handling function.
+This is how that function might look for a express.js server. 
+
+```javascript
+
+// define a catch all route
+app.get( '/:table', ( req, res ) => {
+    // this is the role of the user making the request
+    // usually you would get this from a JWT or from the session
+    const role = 'anonymous'
+
+    // we pass some environment to the database context
+    let queryEnv: Env = [
+        ['role', role],
+        ['request.method', req.method],
+    ]
+
+    // generate the SQL query that sets the env variables for the current request
+    // for simple usecases you might not need this, especcially if you rely on internal permissions
+    const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
+
+    // generate the SQL query from request object
+    const { query, parameters } = await subzero.fmtStatement(
+        
+        // the databse schema the current request is trying to access
+        // this can come in as a header or as part of the url path
+        'public',
+
+        // url prefix (everything before the table name)
+        // this is used to strip from the url path
+        // the part that is not the table name
+        '/'
+
+        // the current role making the request
+        // this can have meaning both in the context of internal permissions
+        // and for the database roles
+        role, 
+        
+        // the HTTP request object, it's type is raughly
+        // type HttpRequest = Request | IncomingMessage | NextApiRequest | ExpressRequest | KoaRequest
+        // so you can use any of those
+        req,
+        
+
+        // some environment variables that are passed to the database context
+        // usually they are leveraged by triggers or Row Level Security policies
+        queryEnv,
+
+        // the maximum number of rows to return
+        // don't pass this if you want to return all rows
+        1000
+
+    )
+
+    // now that we have the query, we just execute it
+    // in the context of a transaction using our database client
+    let result
+    const db = await dbPool.connect()
+    try {
+        await db.query('BEGIN')
+
+        // execute the query that sets the env variables and permissions
+        // you can skip this if you are not using internal permissions
+        await db.query(envQuery, envParameters)
+
+        // execute the main query
+        // the query always returns a single row with a column named 'body'
+        // which contains the response body as a json string
+        result = (await db.query(query, parameters)).rows[0]
+
+       await db.query('COMMIT')
+    } catch (e) {
+        await db.query('ROLLBACK')
+        throw e
+    }
+    finally {
+        db.release()
+    }
+
+    // finally we construct the HTTP response
+    res.status(200).json(result.body)
+    
+} );
+```
+
+
 
 ## Support
 For any questions you can reach out to us on [Discord](https://discord.gg/haRDFncx).
