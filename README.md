@@ -1,6 +1,6 @@
 ## What is this?
 
-**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows developers to implement their own customizable backend APIs on top of any database. The resulting REST API is PostgREST compattible. Currently PostgreSQL, SQLite, MySQL and ClickHouse are supported as target databases.
+**subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows developers to implement their own customizable backend APIs on top of any database. The resulting REST API is PostgREST compatible. Currently PostgreSQL, SQLite, MySQL and ClickHouse are supported as target databases.
 
 This repository is a showcases the functionality and versatility of the new codebase.
 
