@@ -2,14 +2,14 @@
 
 **subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows developers to implement their own customizable backend APIs on top of any database. The resulting REST API is PostgREST compatible. Currently PostgreSQL, SQLite, MySQL and ClickHouse are supported as target databases.
 
-This repository is a showcases the functionality and versatility of the new codebase.
+This repository is a showcases of the functionality and versatility of the new codebase.
 
 Since the core library is written in Rust, it's possible to leverage the capabilities in other settings besides JavaScript runtimes (see [pg-extension](pg-extension) example)
 
 ## Explore examples
 - [node-postgrest](node-postgrest) - This is a TypeScript implementation that can be used as an (extensible) drop-in replacement for PostgREST. Use it as a starting point and extend with custom routes and business logic.
 
-- [clickhouse](clickhouse) - A Typescript server that automatically expose a PostgREST compatible API on top of the underlying [ClickHouse](https://clickhouse.com/) database with build in Authorization capabilities. The example is based on the [ClickHouse tutorial](https://clickhouse.com/docs/en/tutorial/) and shows how to use the REST API to execute complex analytical queries.
+- [clickhouse](clickhouse) - A Typescript server that automatically expose a PostgREST compatible API on top of the underlying [ClickHouse](https://clickhouse.com/) database with built in Authorization capabilities. The example is based on the [ClickHouse tutorial](https://clickhouse.com/docs/en/tutorial/) and shows how to use the REST API to execute complex analytical queries.
 
 - [node-myrest](node-myrest) - This is a TypeScript server that provides a PostgREST compatible REST API for a MySQL database.
 
@@ -54,7 +54,7 @@ Since the core library is written in Rust, it's possible to leverage the capabil
 
 ## How to use
 
-The folowing example is meant as a guide, we recommend picking one of the examples in the [examples](examples) folder and modifying it to your needs.
+The folowing example is meant as a guide, we recommend picking one of the examples and modifying it to your needs.
 
 First decide the target platform where you want to deploy your code. JavaScript runtimes have slight differences so we provide different packages for each platform.
 
@@ -66,7 +66,7 @@ import Subzero, { getIntrospectionQuery, Env } from '@subzerocloud/nodejs'
 // @subzerocloud/web // mostly for cloudflare workers or edge environments
 ```
 
-Upon initialization, subzero requires the database schema shape (which is basically a big json that can come from anywhere), that determines the structure, and in some cases permissions, of the exposed REST api. While it's possible to manually fill in the schema object, it's much easier to just intrtospect the database.
+Upon initialization, subzero requires the database schema shape (which is basically a big json that can come from anywhere), that determines the structure, and in some cases permissions, of the exposed REST api. While it's possible to manually fill in the schema object, it's much easier to just introspect the database.
 
 This code would be executed in an initialization function on server startup.
 
@@ -124,7 +124,7 @@ app.get( '/:table', ( req, res ) => {
     ]
 
     // generate the SQL query that sets the env variables for the current request
-    // for simple usecases you might not need this, especcially if you rely on internal permissions
+    // for simple usecases you might not need this, especially if you rely on internal permissions
     const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
 
     // generate the SQL query from request object
