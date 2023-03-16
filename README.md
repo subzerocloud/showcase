@@ -168,7 +168,7 @@ app.get( '/:table', ( req, res ) => {
         await db.query('BEGIN')
 
         // execute the query that sets the env variables and permissions
-        // you can skip this if you are not using internal permissions
+        // you can comment this if you are using internal permissions
         await db.query(envQuery, envParameters)
 
         // execute the main query
