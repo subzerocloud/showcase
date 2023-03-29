@@ -74,7 +74,7 @@ router.get('/', () => {
     })
 })
 
-// route to return the query log (displayed on Dahsboard)
+// route to return the query log (displayed on Dashboard)
 router.get('/stats', () => {
     return new Response(JSON.stringify(query_log), {
         status: 200,

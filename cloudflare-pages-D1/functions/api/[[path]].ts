@@ -49,9 +49,9 @@ async function init_subzero(env) {
     subzero = new Subzero(dbType, schema, allowed_select_functions)
 }
 
-// we use the itty-router library to define sparate route handlers
+// we use the itty-router library to define separate route handlers
 // this allows us to have the entire backend handled by a single function (CF Worker)
-// alternatifely, one can use the routing logic from Cloudflare Pages 
+// alternatively, one can use the routing logic from Cloudflare Pages 
 // https://developers.cloudflare.com/pages/platform/functions/#functions-routing
 
 // setup the router that is used to route the requests to the correct handler
@@ -66,7 +66,7 @@ router.get('/', async () => {
     })
 })
 
-// route to return the query log (displayed on Dahsboard)
+// route to return the query log (displayed on Dashboard)
 router.get('/stats', async () => {
     return new Response(JSON.stringify(query_log), {
         status: 200,
@@ -165,7 +165,7 @@ export async function onRequest(context) {
         //params, // if filename includes [id] or [[path]]
         //waitUntil, // same as ctx.waitUntil in existing Worker API
         //next, // used for middleware or to fetch assets
-        //data, // arbitrary space for passing data between middlewares
+        //data, // arbitrary space for passing data between middleware
     } = context
 
     return await handleRequest(request, env, context)

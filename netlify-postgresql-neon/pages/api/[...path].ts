@@ -70,7 +70,7 @@ router.get('/', async (_, res) => {
     return res
 })
 
-// route to return the query log (displayed on Dahsboard)
+// route to return the query log (displayed on Dashboard)
 router.get('/stats', async (_, res) => {
     res.status(200).json(query_log)
     return res
