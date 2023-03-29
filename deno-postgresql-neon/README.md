@@ -13,7 +13,7 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/deno-po
     - PostgreSQL (including YugabyteDB, CockroachDB, TimescaleDB, etc)
     - ClickHouse
     - MySQL (PlanetScaleDB upcoming)
-- Supports advanced analitycal queries (window functions, aggregates, etc)
+- Supports advanced analytical queries (window functions, aggregates, etc)
 
 ## Example details
 - Frontend is implemented in NextJS

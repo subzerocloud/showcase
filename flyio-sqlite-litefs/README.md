@@ -13,7 +13,7 @@ See the live version at [northwind-sqlite.fly.dev](https://northwind-sqlite.fly.
     - PostgreSQL (including YugabyteDB, CockroachDB, TimescaleDB, etc)
     - ClickHouse
     - MySQL (PlanetScaleDB upcoming)
-- Supports advanced analitycal queries (window functions, aggregates, etc)
+- Supports advanced analytical queries (window functions, aggregates, etc)
 
 ## Example details
 - Frontend is implemented in NextJS
