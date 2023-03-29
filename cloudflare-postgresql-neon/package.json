@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "yarn wrangler-dev & yarn next-dev && kill $!",
     "next-dev": "next dev",
+    "build": "next build && next export",
+    "deploy": "yarn build && wrangler pages publish out",
     "wrangler-dev": "wrangler pages dev out --port 3001  --local  --compatibility-date=2023-02-08"
   },
   "dependencies": {

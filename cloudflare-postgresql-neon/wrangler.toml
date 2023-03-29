@@ -1,4 +1,0 @@
-# Top-level configuration
-
-name = "northwind-postgresql"
-compatibility_date = "2023-02-08"

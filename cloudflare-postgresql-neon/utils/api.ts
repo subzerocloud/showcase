@@ -19,7 +19,7 @@ interface FetcherResult {
 const apiBaseUrl = '/api'
 const common_options = { headers: { 'Prefer': 'count=exact' } };
 
-export async function fetcher(url: string, options?: any): Promise<FetcherResult> {
+export async function fetcher([url,options]:[string,any]): Promise<FetcherResult> {
     return await fetch(url, options).then(async (res) => {
         const status = res.status
         const rows:any = await res.json()

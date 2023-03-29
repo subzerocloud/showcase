@@ -2,7 +2,7 @@
 ## Running on Cloudflare&apos;s Pages + PostgreSQL (Neon)
 This is a demo of [subZero library](https://www.npmjs.com/package/@subzerocloud/web) capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. 
 
-See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-postgresql-neon) on GitHub.
+See the live version at [northwind-postgresql.pages.dev](https://northwind-postgresql.pages.dev) and the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudflare-postgresql-neon) on GitHub.
 
 
 
@@ -61,6 +61,25 @@ See the [source code](https://github.com/subzerocloud/showcase/tree/main/cloudfl
     ```bash
     open http://localhost:3000
     ```
+
+## Deploying to Cloudflare Pages
+- Setup a PostgreSQL database on [Neon](https://neon.tech) and get a connection string
+- Provision the database
+    ```bash
+    psql <db_connection_string> -f northwindtraders-postgresql.sql
+    ```
+- Create a new Cloudflare Pages project
+    ```bash
+    npx wrangler pages project create <project-name>
+    ```
+- Set the DATABASE_URL environment variable in cloudflare dashboard and click encrypt button (see [docs](https://developers.cloudflare.com/pages/platform/functions/bindings/#environment-variables))
+    
+
+- Deploy to Cloudflare Pages
+    ```bash
+    yarn deploy
+    ```
+
 
 
 ## Credits

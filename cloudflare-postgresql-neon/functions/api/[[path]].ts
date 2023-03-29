@@ -37,6 +37,9 @@ async function init_subzero(env) {
             ['permissions.json', permissions],
         ])
     )
+    if (env.DATABASE_URL === undefined) {
+        throw new Error('DATABASE_URL is not defined')
+    }
     const db = new Client(env.DATABASE_URL)
     await db.connect()
     const result = await db.query(query, parameters)
@@ -103,9 +106,12 @@ router.all('/:table', async (req, env) => {
     log_query(query, parameters)
 
     let result
+    if (env.DATABASE_URL === undefined) {
+        throw new Error('DATABASE_URL is not defined')
+    }
     const db = new Client(env.DATABASE_URL)
-    await db.connect()
     const query_start = Date.now()
+    await db.connect()
     try {
         const txMode = method === 'GET' ? 'READ ONLY' : 'READ WRITE'
         await db.query(`BEGIN ISOLATION LEVEL READ COMMITTED ${txMode}`)
@@ -120,7 +126,6 @@ router.all('/:table', async (req, env) => {
         throw e
     }
     const query_end = Date.now()
-
     const body = result.body // this is a json string
     const status = Number(result.status) || 200
     const pageTotal = Number(result.page_total) || 0
