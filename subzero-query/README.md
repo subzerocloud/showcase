@@ -12,14 +12,11 @@ For a live demo, follow the instructions below to install the SubZero Query Exce
 The SubZero Query Excel Add-in is a powerful tool for querying data from various sources and integrating it into your Excel workbooks. This guide will walk you through the process of installing the add-in using the "Upload My Add-in" method in Excel 365 since the plugin is not yet available in the Office Store.
 
 
-### Prerequisites
-
-- A Microsoft 365 subscription with access to Excel.
 ### Installation Steps
 
 - Open Excel
     
-    Open Microsoft Excel Online.
+    Open [Microsoft Online](https://www.office.com) and create a new Excel workbook.
 
 - Access the Insert Tab
 
