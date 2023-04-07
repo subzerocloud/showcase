@@ -1,7 +1,0 @@
-{
-    "deno.enable": true,
-    "deno.unstable": true,
-    "deno.enablePaths": [
-        "./deno-postgresql-neon/deno"
-    ]
-}
