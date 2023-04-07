@@ -19,7 +19,7 @@ Since the core library is written in Rust, it's possible to leverage the capabil
 
 - Demos of subZero library capabilities, leveraged in a NextJS app, to automatically expose a PostgREST compatible backend on top of the underlying database. Note that the frontend code (nextjs app) is almost exactly the same for all the examples but we are able to use different underlying databases and deploy the app on different platforms. Most of the code in the examples are for the frontend part and the entire backend is just a few lines of code in a single file that you can extend to your liking.
 
-    - [cloudflare-pages-d1](cloudflare-pages-D1) - A example of a cloudflare pages deployment with data stored in D1 (Cloudflare's SQLite compatible edge databse).
+    - [cloudflare-pages-d1](cloudflare-pages-D1) - A example of a cloudflare pages deployment with data stored in D1 (Cloudflare's SQLite compatible edge database).
     - [cloudflare-postgresql-neon](cloudflare-postgresql-neon) - A example of a cloudflare pages deployment with data stored in a PostgreSql database hosted by Neon.
     - [flyio-sqlite-litefs](flyio-sqlite-litefs) - A example of a Fly.io deployment with data stored in a SQLite database that is replicated between nodes using LiteFS.
     - [flyio-postgresql](flyio-postgresql) - A example of a Fly.io deployment with data stored in a PostgreSql database (also hosted on fly.io).
@@ -38,9 +38,9 @@ Since the core library is written in Rust, it's possible to leverage the capabil
     The majority of the alternatives are available only as standalone services and to add custom functionality and business logic, you have to use a combination between a proxy, messaging server and lambda functions (in addition to your database). This, as you imagine, massively complicates your production infrastructure and deployment procedure or locks you in a SaaS that provides those components. By using subzero as a library, you side step all that needles complication and deploy your custom application on any Platform as a single service and codebase.
 
 - ### Multiple database support
-    subZero supports multiple databases and is currently in the process of adding more. This means that you can use the same frontend facing API to access data that might be storred in different types of databases (think combining PostgreSQL and ClickHouse). Another benefit is that you can start with a simple database (like SQLite) and scale up to a more complex one (like PostgreSQL) without having to change your code.
-- ### Advanced analitical capabilities
-    The api exposed by subZero has analitical query support through aggregate and window functions. This means that you can use the api to perform complex queries and aggregations on your data and get the results in a single request. This is especially useful for dashboards and other analitical applications (see [clickhouse](clickhouse) example).
+    subZero supports multiple databases and is currently in the process of adding more. This means that you can use the same frontend facing API to access data that might be stored in different types of databases (think combining PostgreSQL and ClickHouse). Another benefit is that you can start with a simple database (like SQLite) and scale up to a more complex one (like PostgreSQL) without having to change your code.
+- ### Advanced analytical capabilities
+    The api exposed by subZero has analytical query support through aggregate and window functions. This means that you can use the api to perform complex queries and aggregations on your data and get the results in a single request. This is especially useful for dashboards and other analytical applications (see [clickhouse](clickhouse) example).
 
 ## Roadmap
 - [x] Core functions/types
@@ -56,7 +56,7 @@ Since the core library is written in Rust, it's possible to leverage the capabil
 
 ## How to use
 
-The folowing example is meant as a guide, we recommend picking one of the examples and modifying it to your needs.
+The following example is meant as a guide, we recommend picking one of the examples and modifying it to your needs.
 
 First decide the target platform where you want to deploy your code. JavaScript runtimes have slight differences so we provide different packages for each platform.
 
@@ -126,13 +126,13 @@ app.get( '/:table', ( req, res ) => {
     ]
 
     // generate the SQL query that sets the env variables for the current request
-    // for simple usecases you might not need this, especially if you rely on internal permissions
+    // for simple use cases you might not need this, especially if you rely on internal permissions
     const { query: envQuery, parameters: envParameters } = fmtPostgreSqlEnv(queryEnv)
 
     // generate the SQL query from request object
     const { query, parameters } = await subzero.fmtStatement(
         
-        // the databse schema the current request is trying to access
+        // the database schema the current request is trying to access
         // this can come in as a header or as part of the url path
         'public',
 
@@ -146,7 +146,7 @@ app.get( '/:table', ( req, res ) => {
         // and for the database roles
         role, 
         
-        // the HTTP request object, it's type is raughly
+        // the HTTP request object, it's type is roughly
         // type HttpRequest = Request | IncomingMessage | NextApiRequest | ExpressRequest | KoaRequest
         // so you can use any of those
         req,
