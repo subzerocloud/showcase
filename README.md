@@ -72,6 +72,9 @@ For the capabilities and exposed routes of the Auth module, you can consult [GoT
 
 For the capabilities and exposed routes of the REST module, you can consult [PostgREST](https://postgrest.org) & [Supabase](https://supabase.com/docs/reference/javascript/select) documentation.
 
+### Advanced usage
+
+While in most cases you will be using subzero through the exposed route handlers, you can also use it as a library and create your own custom handlers. For any technical details you can reach us on [discord](https://discord.gg/haRDFncx).
 
 ## Explore examples
 - [node-postgrest](node-postgrest) - This is a TypeScript implementation that can be used as an (extensible) drop-in replacement for PostgREST. Use it as a starting point and extend with custom routes and business logic.
@@ -115,13 +118,9 @@ For any questions you can reach out to us on [Discord](https://discord.gg/haRDFn
 
 
 ## License
-A general overview of the standard commercial license is:
-### You can
-- Use the binary distribution for commercial or non-commercial purposes without charge 
-- Use the source distribution to develop a SaaS product (subject to charges)
-- Use the source distribution to develop software that is distributed to clients in binary form (subject to charges).
-### You can not
-- Distribute/publish the source code
-- Develop services/software that directly competes with subzero
-- Study the code to create competing products
 
+The compiled library is licensed under [LGPLv3](http://www.gnu.org/licenses/lgpl-3.0.html) 
+
+Commercial-friendly license available at [subzero.cloud](https://subzero.cloud) soon.
+
+For licensing questions, you can reach us on [Discord](https://discord.gg/haRDFncx) or [email](mailto:hello@subzero.cloud).
