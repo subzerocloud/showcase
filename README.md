@@ -24,14 +24,9 @@ Since the core library is written in Rust, it's possible to leverage the capabil
 
 ## How to use it
 
-### Install the project generator
-```bash
-npm install -g yo @subzerocloud/generator-yo
-```
-
 ### Generate a new project
 ```bash
-yo @subzerocloud/yo
+npx @subzerocloud/scaffold@latest
 ```
 
 The generator will create a new project in the current directory. It will contain a sample db schema and a sample frontend application but the  important part is the code generated for the backend. The entrypoint file will contain an express server that you can customize to your liking. The magic happens in two subzero modules (auth & rest) that expose route handlers for the authentication and REST api respectively.
@@ -65,6 +60,7 @@ import { init as restInit, rest } from './rest';
 // Mount the rest router
 router.use('/rest/v1', isAuthenticated, rest(['public']));
 ```
+For more details see the [docs](https://docs.subzero.cloud/tutorial/new-project/)
 
 ### Using the generated API from the frontend
 
