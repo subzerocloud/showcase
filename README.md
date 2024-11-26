@@ -1,3 +1,6 @@
+## Outdated warning
+While the code in the repository still works, subzero has added more functionality and higher level abstractions since the last update. For the most up to date information, please refer to the [documentation](https://docs.subzero.cloud/).
+
 ## What is this?
 
 **subZero** is a library implemented in Rust with JS/TypeScript [bindings](https://www.npmjs.com/package/@subzerocloud/nodejs) that allows developers to implement their own customizable backend APIs on top of any database. The resulting REST API is PostgREST compatible. Currently PostgreSQL, SQLite, MySQL and ClickHouse are supported as target databases.
@@ -73,6 +76,9 @@ For the capabilities and exposed routes of the REST module, you can consult [Pos
 While in most cases you will be using subzero through the exposed route handlers, you can also use it as a library and create your own custom handlers. For any technical details you can reach us on [discord](https://discord.gg/haRDFncx).
 
 ## Explore examples
+
+- [nextjs-new](nextjs-new) - A NextJS (15) app that uses the subZero library to automatically expose a PostgREST compatible backend on top of the underlying database. The example is based on the [NextJS tutorial](https://nextjs.org/learn/basics/create-nextjs-app) and shows how to use the REST API to execute complex queries.
+
 - [node-postgrest](node-postgrest) - This is a TypeScript implementation that can be used as an (extensible) drop-in replacement for PostgREST. Use it as a starting point and extend with custom routes and business logic.
 
 - [clickhouse](clickhouse) - A Typescript server that automatically expose a PostgREST compatible API on top of the underlying [ClickHouse](https://clickhouse.com/) database with built in Authorization capabilities. The example is based on the [ClickHouse tutorial](https://clickhouse.com/docs/en/tutorial/) and shows how to use the REST API to execute complex analytical queries.
