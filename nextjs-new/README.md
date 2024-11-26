@@ -18,6 +18,7 @@ curl -i "http://localhost:3000/rest/check" # call a custom route
 curl -i "http://localhost:3000/rest/todos?select=id,name" # should raise an unauthorized error
 curl -i -H "Authorization: Bearer $JWT_TOKEN1" "http://localhost:3000/rest/todos?select=id,name" # should return the todos for user 1
 curl -i -H "Authorization: Bearer $JWT_TOKEN2" "http://localhost:3000/rest/todos?select=id,name" # should return the todos for user 2
+```
 
 Below is the original README.md from the next.js project template
 
