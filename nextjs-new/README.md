@@ -8,6 +8,17 @@ Things added compared to a default next.js app:
 - `next.config.mjs` has some custom logic to copy over the subzero wasm files.
 
 
+After running `npm install` and `npm run dev`, you can try the api like this:
+```
+# Note these jwt tokens work because they were created on https://jwt.io/ using the hardcoded secret in the .env file
+export JWT_TOKEN1="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQifQ.fNyithqhPEfZHmmG1TVXLfLxHp_3YybuQ__Mqqh0JPE"
+export JWT_TOKEN2="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQifQ.5J5SdQWhBdyNPCLpZP_VlNt7eYJHMGPKesxlY4sywuM"
+
+curl -i "http://localhost:3000/rest/check" # call a custom route
+curl -i "http://localhost:3000/rest/todos?select=id,name" # should raise an unauthorized error
+curl -i -H "Authorization: Bearer $JWT_TOKEN1" "http://localhost:3000/rest/todos?select=id,name" # should return the todos for user 1
+curl -i -H "Authorization: Bearer $JWT_TOKEN2" "http://localhost:3000/rest/todos?select=id,name" # should return the todos for user 2
+
 Below is the original README.md from the next.js project template
 
 ------------------------------------------------------------
